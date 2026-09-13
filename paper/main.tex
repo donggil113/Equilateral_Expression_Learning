@@ -295,13 +295,16 @@ the Reynolds operator.
   orthogonal or not. Hence the $L^2$ risk decomposition underlying
   Elesedy--Zaidi-type results, and the resulting strict generalisation benefit for
   invariant targets, hold verbatim.
-\item[(b)] \emph{(Failure in the estimator's geometry.)} Let $k(x,y) = \phi(\langle
-  x,y\rangle)$ be a dot-product kernel with $\phi$ non-degenerate. Then $k$ is
-  $G$-invariant iff $\rhoext$ acts orthogonally. For $G_D$ with $\kappa(D) > 1$ the
-  standard kernels are \emph{not} $G_D$-invariant, $\mathcal{Q}$ acting on the RKHS is
-  an \emph{oblique} projection, and the Pythagorean identity $\|f\|^2 = \|\mathcal{Q}
-  f\|^2 + \|f - \mathcal{Q}f\|^2$ --- which every norm-based excess-risk bound uses ---
-  fails.
+\item[(b)] \emph{(Failure in the estimator's geometry.)} Let $k$ be either a
+  dot-product kernel $k(x,y) = \phi(\langle x,y\rangle)$ with $\phi$ injective, or a
+  radial kernel $k(x,y) = \psi(\|x-y\|)$ with $\psi$ injective. Then $k$ is
+  $G$-invariant iff $\rhoext$ acts orthogonally on the subspace it moves. For $G_D$
+  with $\kappa(D) > 1$ the standard kernels --- linear, odd-degree polynomial,
+  Gaussian, Laplacian --- are therefore \emph{not} $G_D$-invariant; $\mathcal{Q}$
+  acting on the RKHS is an \emph{oblique} projection, and the Pythagorean identity
+  $\|f\|^2 = \|\mathcal{Q}f\|^2 + \|f - \mathcal{Q}f\|^2$ --- which every norm-based
+  excess-risk bound uses --- fails. The same applies to any weight-decay-regularised
+  parametric class, the Euclidean parameter norm playing the role of the RKHS norm.
 \item[(c)] \emph{(Repair.)} With $k_M(x,y) = \phi(\langle x,y\rangle_{M})$ the kernel
   is $G_D$-invariant, $\mathcal{Q}$ is self-adjoint on $\mathcal{H}_{k_M}$, and the
   strict benefit holds with gain equal to the fraction of RKHS dimensions removed.
@@ -402,8 +405,16 @@ encoder: temporal convolution shared across the three vector components and
 \emph{without bias} on the vector path; arbitrary channel mixing (exhaustive by
 Theorem~\ref{thm:gauge}(c)); invariant read-outs $\|v_c\|$ and $\langle v_a,v_b\rangle$;
 cross products $v_a \times v_b$; and a gated nonlinearity that rescales vectors by a
-scalar gate. The invariant head pools through the trajectory Gram matrix of
-Theorem~\ref{thm:ident}; the pose head emits two equivariant vectors that are
+scalar gate. The invariant head pools through two contractions of the trajectory Gram matrix of
+Theorem~\ref{thm:ident} --- the time-averaged Gram $\tfrac{1}{T}\sum_t \langle
+v_c(t), v_d(t)\rangle$ and the Gram of the time means. The full Gram is $O(T^2)$ and is
+not materialised; what makes the head expressive is that the scalar stream already
+carries \emph{per-time-step} invariants (norms and inner products) through the
+temporal convolutions, so the pooling is not the only route by which loop morphology
+reaches the classifier. Using the outer product of the time-\emph{averaged} vectors
+alone --- the obvious implementation --- averages the trajectory away before
+contracting it and costs $0.035$ macro-F1 in the small-sample regime, so the
+distinction is not merely formal. The pose head emits two equivariant vectors that are
 orthonormalised into an element of $\SO(3)$.
 
 The single most consequential detail is the entry point. Feeding the twelve leads
