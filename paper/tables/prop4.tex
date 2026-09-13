@@ -1,0 +1,11 @@
+\begin{tabular}{lcccc}
+\toprule
+ & & \multicolumn{3}{c}{linear eval, macro-F1 at $n$ labels} \\
+\cmidrule(lr){3-5}
+Pretrained encoder & probe $R^2$ (pose) & $100$ & $500$ & $2000$ \\
+\midrule
+  CNN, SSL (typical FM recipe) & 0.183 & 0.283 & 0.264 & 0.311 \\
+  CNN, SSL + rotation aug. & -0.004 & 0.408 & 0.457 & 0.484 \\
+  Equivariant, SSL (ours) & -0.010 & 0.503 & 0.576 & 0.633 \\
+\bottomrule
+\end{tabular}

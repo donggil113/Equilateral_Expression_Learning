@@ -300,7 +300,16 @@ Model & {" & ".join(names[k] for k in keys)} \\\\
 \\bottomrule
 \\end{{tabular}}""")
 
-    fig, ax = plt.subplots(figsize=(5.0, 2.9))
+    # Plain-text tick labels: the LaTeX spellings above are for the table only, and
+    # stripping markup out of them leaves artefacts in the figure.
+    plain = {("none", 0): "clean", ("rotation", 60.0): "rot. 60\u00b0",
+             ("rotation", 90.0): "rot. 90\u00b0", ("rotation", 180.0): "rot. Haar",
+             ("lead_reversal", "LA-RA"): "LA-RA swap",
+             ("lead_reversal", "LA-LL"): "LA-LL swap",
+             ("displacement", 0.05): "electrode 0.05",
+             ("displacement", 0.1): "electrode 0.10",
+             ("displacement", 0.2): "electrode 0.20"}
+    fig, ax = plt.subplots(figsize=(5.6, 3.2))
     width = 0.8 / max(len(models), 1)
     xs = np.arange(len(keys))
     for i, m in enumerate(models):
@@ -308,10 +317,12 @@ Model & {" & ".join(names[k] for k in keys)} \\\\
         ax.bar(xs + i * width - 0.4 + width / 2, vals, width * 0.88,
                color=PALETTE[m], label=LABELS[m], edgecolor="white", linewidth=0.8)
     ax.set_xticks(xs)
-    ax.set_xticklabels([names[k].replace("\\\\", "").replace("$", "").replace("\\circ", "deg")
-                        for k in keys], rotation=35, ha="right", fontsize=7)
+    ax.set_xticklabels([plain[k] for k in keys], rotation=35, ha="right", fontsize=7.5)
     ax.set_ylabel("test macro-F1")
-    ax.legend(frameon=False, fontsize=7.5, ncol=2)
+    ax.set_ylim(0, 0.85)
+    # Legend above the axes so it never sits on top of the bars.
+    ax.legend(frameon=False, fontsize=7.5, ncol=4, loc="lower center",
+              bbox_to_anchor=(0.5, 1.01), handlelength=1.2, columnspacing=1.0)
     fig.savefig(FIGURES / "h3_robustness.pdf")
     fig.savefig(FIGURES / "h3_robustness.png")
     plt.close(fig)

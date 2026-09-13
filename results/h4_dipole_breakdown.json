@@ -206,11 +206,11 @@
       "model": "equivariant",
       "seed": 0,
       "task": "5-class incl. AXIS",
-      "accuracy": 0.5975,
-      "macro_f1": 0.5676117971429951,
-      "macro_auroc": 0.8569955253382548,
-      "recall_AXIS": 0.22900763358778625,
-      "recall_pose_invariant_mean": 0.6540178880032935
+      "accuracy": 0.57375,
+      "macro_f1": 0.5533839736459314,
+      "macro_auroc": 0.8401883400469117,
+      "recall_AXIS": 0.3893129770992366,
+      "recall_pose_invariant_mean": 0.5922302281075703
     },
     {
       "model": "equivariant-relaxed",
@@ -231,6 +231,16 @@
       "macro_auroc": 0.9149512917931146,
       "recall_AXIS": 0.7862595419847328,
       "recall_pose_invariant_mean": 0.679347156727861
+    },
+    {
+      "model": "equivariant-pose-aware",
+      "seed": 0,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.74,
+      "macro_f1": 0.7379508984244236,
+      "macro_auroc": 0.9308324904260201,
+      "recall_AXIS": 0.7404580152671756,
+      "recall_pose_invariant_mean": 0.7286366068105989
     },
     {
       "model": "equivariant+pose-head",
@@ -271,6 +281,16 @@
       "macro_auroc": 0.9141789727538274,
       "recall_AXIS": 0.8300653594771242,
       "recall_pose_invariant_mean": 0.7001327226425618
+    },
+    {
+      "model": "equivariant-pose-aware",
+      "seed": 1,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.735,
+      "macro_f1": 0.7418569106500141,
+      "macro_auroc": 0.9274201851846845,
+      "recall_AXIS": 0.7843137254901961,
+      "recall_pose_invariant_mean": 0.7232247908094722
     },
     {
       "model": "equivariant+pose-head",

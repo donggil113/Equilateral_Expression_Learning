@@ -65,11 +65,22 @@ capacity is spent modelling the nuisance orbit.
 
 Empirically, our gauge-equivariant network is invariant to floating-point precision
 ($\num{7e-7}$ relative), whereas a network built on the usual orthogonality assumption
-errs by $\num{4e-2}$ and a conventional CNN by $0.99$. The sample-efficiency picture is
-more nuanced than the folklore: the constraint is a clear win in the small-data
-regime and a measurable \emph{cost} once labels are plentiful, and we locate the
-crossover. We report this rather than tuning it away, and give the accompanying
-approximate-equivariance and pose-aware variants that recover the deficit.
+errs by $\num{1.3e-1}$ and a conventional CNN by $0.80$. The sample-efficiency
+hypothesis we set out to test does \emph{not} survive: at matched parameters the
+equivariant model stays within $\pm 0.025$ macro-F1 of matched baselines at every
+training-set size, and what deficit appears at large $n$ is attributable to the
+efficiency of the parameterisation and to a shared learning rate rather than to the
+symmetry --- widening the model, or tuning its step size, removes it. What does hold,
+decisively, is robustness: the model is exactly flat under rotations that cost
+baselines up to $0.33$ macro-F1, and it retains an advantage under electrode swaps and
+displacements that are \emph{not} group elements at all. So does the
+invariant/equivariant decomposition, which yields the best model in the comparison on a
+task mixing pose-invariant and pose-defined labels. Finally, we identify a cost of exact
+invariance that is specific to non-orthogonal actions and has no analogue in the usual
+setting: isotropic electrode-frame noise is \emph{anisotropic} in the equivariant
+coordinates, with condition number $\kappa(D)^2$, so the Bayes-optimal classifier is not
+invariant even when the label is. That effect accounts for roughly nine tenths of the
+large-sample gap.
 \end{abstract}
 
 \section{Introduction}
@@ -663,6 +674,24 @@ decomposition of Theorem~\ref{thm:ident} is what repairs it.}
 \input{tables/h4_axis}
 \end{table}
 
+The ceiling is exactly where the theory puts it: the strictly invariant model reaches
+$\textsc{axis}$ recall $0.378$ against $0.808$ for the unconstrained CNN. Adding a pose
+\emph{head} barely helps ($0.421$), and it is worth being clear about why, because the
+distinction is easy to miss: the head predicts the rotation, but its prediction never
+reaches the classifier, whose features remain strictly invariant. Predicting the
+nuisance is not the same as being allowed to use it.
+
+Exposing the time-pooled \emph{equivariant} features to the classifier --- the other
+half of the decomposition of Theorem~\ref{thm:ident} --- is what actually works, and it
+gives the best model in the comparison: macro-F1 $0.740$ against $0.711$ for the
+unconstrained CNN, with $\textsc{axis}$ recall $0.762$ and, simultaneously, the best
+recall on the pose-invariant classes ($0.726$ versus $0.690$). Symmetry is broken only
+through one named channel and only where the task demands it, and the invariant
+sub-representation stays clean; the result is a model that is better than the
+unconstrained baseline on both halves of a task that mixes invariant and equivariant
+labels. This, rather than the sample-efficiency story, is what we would put forward as
+the practical case for equivariance here.
+
 \subsection{Noise frame: isolating the mechanism of Remark~\ref{rem:noise}}\label{sec:noiseframe}
 
 Table~\ref{tab:noiseframe} repeats the comparison with noise injected in the heart
@@ -737,8 +766,21 @@ exactly computable, clinically interpretable --- and non-orthogonal. We characte
 its equivariant maps, located precisely where the standard generalisation theory does
 and does not survive the loss of orthogonality, settled the identifiability of the
 invariant/equivariant split, and built an architecture that is exactly equivariant
-where the off-the-shelf construction is not. The sample-efficiency picture that emerged
-is a qualified one, and we think the qualification is the more useful result.
+where the off-the-shelf construction is not.
+
+The empirical picture is not the one we expected, and we think the corrections are
+worth as much as the confirmations. The sample-efficiency hypothesis failed; the
+robustness result is decisive, including out of group where we had no right to expect
+it; the nuisance-leakage diagnostic is uninformative for supervised encoders and
+informative for self-supervised ones, which is the regime it was aimed at; and the
+practical case for equivariance here turns out to rest on the
+invariant/equivariant \emph{decomposition} rather than on invariance alone. Along the
+way two effects emerged that would have been invisible had we only reported the
+headline comparison: a normalisation defect that made the vector path decay by a factor
+of $80$ over four blocks and masqueraded as evidence against equivariance, and the
+noise-anisotropy consequence of non-orthogonality. Both are properties of the
+non-orthogonal setting rather than of this dataset, and we expect them to recur wherever
+a physically derived symmetry acts non-orthogonally.
 
 \bibliographystyle{plainnat}
 \bibliography{refs}

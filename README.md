@@ -108,12 +108,26 @@ But two controls show the large-sample *deficit* is not a property of the symmet
   (equivariant 0.799 at η=1e-2 vs baseline best 0.791). The usual shared-LR protocol
   was costing the constrained model most of its apparent deficit.
 
-**H2 / Proposition 4 (nuisance leakage) — NOT supported for supervised encoders.** Every
-probe R² is indistinguishable from zero. A model trained end-to-end on invariant labels
-discards the pose, so the diagnostic is uninformative exactly where a label signal
-exists. The hypothesis conflated "the input contains the nuisance" with "the
-representation retains it". The self-supervised setting is where it has something to
-say.
+**H2 / Proposition 4 (nuisance leakage) — NOT supported for supervised encoders; the
+diagnostic works in the setting it was designed for.** Every supervised probe R² is
+indistinguishable from zero: a model trained end-to-end on invariant labels discards
+the pose, so the diagnostic is uninformative exactly where a label signal exists. The
+hypothesis conflated "the input contains the nuisance" with "the representation retains
+it".
+
+Under self-supervised pretraining — the regime ECG foundation models occupy — it does
+its job:
+
+| Pretrained encoder | probe R² (pose) | linear eval @100 | @500 | @2000 |
+|---|---|---|---|---|
+| CNN, SSL (typical FM recipe) | **0.183** | 0.283 | 0.264 | 0.311 |
+| CNN, SSL + rotation aug. | −0.004 | 0.408 | 0.457 | 0.484 |
+| Equivariant, SSL (ours) | −0.010 | **0.503** | **0.576** | **0.633** |
+
+Leakage is far below the R² > 0.5 H2 predicted, so the hypothesis fails at its claimed
+magnitude — but the ordering it implies is exactly right, and probe R² is perfectly
+anti-correlated with downstream quality across the three encoders. Three encoders are
+not a law; we state the conclusion narrowly.
 
 **H3 (robustness) — STRONGLY supported; the clearest empirical result.** In-group the
 equivariant model is exactly flat (0.749 at 60°, 90° and Haar) while baselines fall to
@@ -135,9 +149,25 @@ weight does *not* track the non-dipolar fraction (0.208 → 0.178, if anything t
 way), so it is a useful architecture but not a useful measuring instrument.
 
 **A strictly invariant model provably cannot represent pose-defined labels** such as
-axis deviation (AXIS recall 0.298 vs 0.808 for a CNN). This is a theorem, not a
-disappointing result, and the invariant ⊕ equivariant decomposition of Theorem 3 is
-what repairs it.
+axis deviation. This is a theorem, not a disappointing result, and the
+invariant ⊕ equivariant decomposition of Theorem 3 is what repairs it — this is the
+strongest practical case for equivariance we found, stronger than the
+sample-efficiency story:
+
+| Model (5-class, includes pose-defined AXIS) | macro-F1 | AXIS recall | invariant-class recall |
+|---|---|---|---|
+| Equivariant (strictly invariant) | 0.563 | 0.378 | 0.612 |
+| Equivariant + pose *head* | 0.567 | 0.421 | 0.601 |
+| Equivariant (relaxed) | 0.708 | 0.737 | 0.705 |
+| ResNet-1D (unconstrained) | 0.711 | 0.808 | 0.690 |
+| **Equivariant + pose *features* (Thm 3)** | **0.740** | 0.762 | **0.726** |
+
+A pose *head* barely helps, and the reason is easy to miss: it predicts the rotation,
+but its prediction never reaches the classifier, whose features stay strictly
+invariant. Predicting the nuisance is not the same as being allowed to use it. Exposing
+the equivariant features to the classifier gives the best model overall — better than
+the unconstrained baseline on *both* halves of a task mixing invariant and
+pose-defined labels.
 
 **A fourth consequence of non-orthogonality, apparently new.** Isotropic noise in the
 *electrode* frame becomes anisotropic in heart-vector coordinates, with condition
