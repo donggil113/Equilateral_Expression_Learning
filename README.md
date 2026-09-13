@@ -84,8 +84,13 @@ so those two claims are not falsifiable on real data alone.
   usually stated.** In `L²(μ)` the Reynolds operator remains an orthogonal projection
   regardless. The failure is in the *estimator's* geometry (RKHS / weight-decay norm),
   where it becomes oblique; the repair and its exact constant `κ(T)^k` are given.
-- **H1 is only partially supported.** Equivariance is a clear win with few labels and a
-  measurable cost with many; the crossover is reported rather than tuned away.
+- **H1 is only partially supported.** Equivariance is a clear win with few labels
+  (+0.08 macro-F1 at n=125) and roughly at parity with many (−0.01 at n=4000); the
+  crossover is reported rather than tuned away.
+- **One architectural detail dominates that comparison.** Without an equivariant
+  normalisation the gated nonlinearity starves the vector path (magnitudes decay ~80x
+  over four blocks), which reads as "equivariance doesn't scale". Fixing it moved
+  macro-F1 at n=4000 from 0.735 to 0.776.
 - **A strictly invariant model provably cannot represent pose-defined labels** such as
   axis deviation. This is a theorem, not a disappointing result, and the
   invariant⊕equivariant decomposition of Theorem 3 is what repairs it.

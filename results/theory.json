@@ -185,6 +185,32 @@
       "fraction_removed": 0.7966861496712244
     }
   ],
+  "theorem2_norm_distortion": [
+    {
+      "degree": 1,
+      "condition_number": 2.5921733077638707,
+      "min_singular_value": 0.3857766751184728,
+      "max_singular_value": 0.9999999999999997
+    },
+    {
+      "degree": 2,
+      "condition_number": 6.719362457483487,
+      "min_singular_value": 0.14882364306546372,
+      "max_singular_value": 0.9999999999999993
+    },
+    {
+      "degree": 3,
+      "condition_number": 17.41775200747934,
+      "min_singular_value": 0.05741269020081295,
+      "max_singular_value": 0.999999999999999
+    },
+    {
+      "degree": 4,
+      "condition_number": 45.14983183503852,
+      "min_singular_value": 0.022148476735276545,
+      "max_singular_value": 0.9999999999999987
+    }
+  ],
   "theorem2_monte_carlo_check": [
     {
       "n_vector": 1,

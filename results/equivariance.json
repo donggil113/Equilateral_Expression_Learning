@@ -3,50 +3,50 @@
   "architectures": {
     "equivariant": {
       "small_rotation_30deg": {
-        "relative_logit_error_mean": 4.4578406210860066e-07,
-        "relative_logit_error_max": 5.273601004773809e-07,
+        "relative_logit_error_mean": 6.109702361811742e-07,
+        "relative_logit_error_max": 7.830860226931691e-07,
         "pose_equivariance_error_deg_max": 0.03956468030810356
       },
       "haar_rotation": {
-        "relative_logit_error_mean": 4.5896805822565057e-07,
-        "relative_logit_error_max": 6.328320978354895e-07,
+        "relative_logit_error_mean": 6.191273840272515e-07,
+        "relative_logit_error_max": 6.786745530007465e-07,
         "pose_equivariance_error_deg_max": 0.03956468030810356
       }
     },
     "equivariant-naive-lift": {
       "small_rotation_30deg": {
-        "relative_logit_error_mean": 0.014417157413845416,
-        "relative_logit_error_max": 0.03583178296685219,
-        "pose_equivariance_error_deg_max": 121.39952850341797
+        "relative_logit_error_mean": 0.015021877596154809,
+        "relative_logit_error_max": 0.03626532480120659,
+        "pose_equivariance_error_deg_max": 36.404029846191406
       },
       "haar_rotation": {
-        "relative_logit_error_mean": 0.06742499116808176,
-        "relative_logit_error_max": 0.0853702649474144,
-        "pose_equivariance_error_deg_max": 179.88809204101562
+        "relative_logit_error_mean": 0.08007542882114649,
+        "relative_logit_error_max": 0.13155587017536163,
+        "pose_equivariance_error_deg_max": 85.48747253417969
       }
     },
     "resnet": {
       "small_rotation_30deg": {
-        "relative_logit_error_mean": 0.20842613466084003,
-        "relative_logit_error_max": 0.599429726600647,
-        "pose_equivariance_error_deg_max": 179.35108947753906
+        "relative_logit_error_mean": 0.21287236793432385,
+        "relative_logit_error_max": 0.509647786617279,
+        "pose_equivariance_error_deg_max": 50.04122543334961
       },
       "haar_rotation": {
-        "relative_logit_error_mean": 0.5949037466198206,
-        "relative_logit_error_max": 0.7156664729118347,
-        "pose_equivariance_error_deg_max": 179.62257385253906
+        "relative_logit_error_mean": 0.653386402875185,
+        "relative_logit_error_max": 0.7967705130577087,
+        "pose_equivariance_error_deg_max": 179.00062561035156
       }
     },
     "vcg-resnet": {
       "small_rotation_30deg": {
-        "relative_logit_error_mean": 0.12056076287990436,
-        "relative_logit_error_max": 0.2925861179828644,
-        "pose_equivariance_error_deg_max": 159.88040161132812
+        "relative_logit_error_mean": 0.0724840103648603,
+        "relative_logit_error_max": 0.14536252617835999,
+        "pose_equivariance_error_deg_max": 172.7137451171875
       },
       "haar_rotation": {
-        "relative_logit_error_mean": 0.4227825999259949,
-        "relative_logit_error_max": 0.5415891408920288,
-        "pose_equivariance_error_deg_max": 179.97201538085938
+        "relative_logit_error_mean": 0.3755755964666605,
+        "relative_logit_error_max": 0.5686001181602478,
+        "pose_equivariance_error_deg_max": 179.76425170898438
       }
     }
   },

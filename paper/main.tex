@@ -405,12 +405,25 @@ distinguish the two $\Ortho(3)$ cosets.
 The network operates entirely in the gauge of Theorem~\ref{thm:gauge}. The lift
 $v = D^{+}x$, $s = Cx$ (with $C$ an orthonormal basis of $\Vres$) is a lossless
 re-coordinatisation of $\Veight$ into one $\ell{=}1$ channel and five $\ell{=}0$
-channels. Five primitives, each provably commuting with the action, then build the
+channels. Six primitives, each provably commuting with the action, then build the
 encoder: temporal convolution shared across the three vector components and
 \emph{without bias} on the vector path; arbitrary channel mixing (exhaustive by
 Theorem~\ref{thm:gauge}(c)); invariant read-outs $\|v_c\|$ and $\langle v_a,v_b\rangle$;
-cross products $v_a \times v_b$; and a gated nonlinearity that rescales vectors by a
-scalar gate. The invariant head pools through two contractions of the trajectory Gram matrix of
+cross products $v_a \times v_b$; a gated nonlinearity that rescales vectors by a
+scalar gate; and an equivariant normalisation of the vector channels.
+
+That last primitive is not cosmetic, and we flag it because it is an easy thing to
+omit. The gate multiplies vectors by a sigmoid, which is always below one, so without
+normalisation the vector magnitudes decay geometrically with depth --- we measured a
+factor of $80$ over four blocks --- while the scalar stream stays healthy under its
+GroupNorm. The vector path is then starved and the model quietly degenerates towards
+its scalar half. Dividing each channel by the root-mean-square of its norm over time
+fixes this; because that divisor is an \emph{invariant} scalar, equivariance is
+preserved exactly. The effect on the headline comparison is large: at $n = 4000$ the
+equivariant model's macro-F1 rises from $0.735$ to $0.776$ against a baseline $0.791$,
+turning what looked like evidence against equivariance at scale into near-parity. Any
+study reporting that an equivariant architecture underperforms should check this
+first. The invariant head pools through two contractions of the trajectory Gram matrix of
 Theorem~\ref{thm:ident} --- the time-averaged Gram $\tfrac{1}{T}\sum_t \langle
 v_c(t), v_d(t)\rangle$ and the Gram of the time means. The full Gram is $O(T^2)$ and is
 not materialised; what makes the head expressive is that the scalar stream already
