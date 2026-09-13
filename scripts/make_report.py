@@ -440,6 +440,33 @@ model & $n$ & {header} & best \\\\
 \\end{{tabular}}""")
 
 
+def prop4_table(d: dict) -> None:
+    probe = _mean_std(d["probes"], ("encoder",), "r2_mean")
+    ev = _mean_std(d["linear_eval"], ("encoder", "n_labels"), "macro_f1")
+    budgets = sorted({r["n_labels"] for r in d["linear_eval"]})
+    order = ["cnn-ssl", "cnn-ssl+rot-aug", "equivariant-ssl"]
+    names = {"cnn-ssl": "CNN, SSL (typical FM recipe)",
+             "cnn-ssl+rot-aug": "CNN, SSL + rotation aug.",
+             "equivariant-ssl": "Equivariant, SSL (ours)"}
+    body = []
+    for e in order:
+        if (e,) not in probe:
+            continue
+        cells = [f"{ev[(e,n)][0]:.3f}" if (e, n) in ev else "--" for n in budgets]
+        body.append(f"  {names[e]} & {probe[(e,)][0]:.3f} & " + " & ".join(cells)
+                    + " \\\\")
+    header = " & ".join("$" + str(n) + "$" for n in budgets)
+    _tex(TABLES / "prop4.tex", f"""\\begin{{tabular}}{{lc{'c'*len(budgets)}}}
+\\toprule
+ & & \\multicolumn{{{len(budgets)}}}{{c}}{{linear eval, macro-F1 at $n$ labels}} \\\\
+\\cmidrule(lr){{3-{2+len(budgets)}}}
+Pretrained encoder & probe $R^2$ (pose) & {header} \\\\
+\\midrule
+{chr(10).join(body)}
+\\bottomrule
+\\end{{tabular}}""")
+
+
 def main() -> None:
     handlers = [
         ("theory", theory_tables), ("equivariance", equivariance_table),
@@ -447,6 +474,7 @@ def main() -> None:
         ("h2_h3_probe_robustness", h2_h3_outputs),
         ("h4_dipole_breakdown", h4_outputs), ("capacity_ablation", capacity_table),
         ("noise_frame", noise_frame_table), ("lr_fairness", lr_fairness_table),
+        ("prop4_ssl_probe", prop4_table),
     ]
     for name, fn in handlers:
         d = load(name)

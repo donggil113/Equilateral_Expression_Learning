@@ -23,4 +23,5 @@ run exp_h4_dipole_breakdown --seeds 2 --steps 700
 run exp_capacity_ablation --seeds 2
 run exp_lr_fairness
 run exp_noise_frame --seeds 2
+run exp_prop4_ssl_probe --seeds 2
 echo "ALL DONE $(date -u +%H:%M:%S)"

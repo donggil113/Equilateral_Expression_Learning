@@ -500,6 +500,21 @@ each encoder's embedding.}
 \input{tables/h2_probe}
 \end{table}
 
+\paragraph{The diagnostic in its intended setting.} Proposition~\ref{prop:probe} is
+aimed at \emph{pretrained} encoders, so we also apply it to encoders trained with a
+SimCLR-style contrastive objective on unlabelled records --- the recipe ECG foundation
+models actually use. Table~\ref{tab:prop4} reports both the probe $R^2$ and what the
+frozen representation is worth downstream at several label budgets. The three rows are
+the typical recipe, the same recipe with rotation augmentation (what
+VCG-augmentation methods do, and our strongest existing-practice control), and our
+equivariant encoder, whose $R^2$ is zero by construction.
+
+\begin{table}[t]\centering
+\caption{Nuisance leakage and downstream value of self-supervised representations.}
+\label{tab:prop4}
+\input{tables/prop4}
+\end{table}
+
 \subsection{H3: robustness under in-group and out-of-group corruption}
 
 \begin{table}[t]\centering
