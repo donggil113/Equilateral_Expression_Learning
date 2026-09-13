@@ -1,0 +1,152 @@
+{
+  "rows": [
+    {
+      "noise_frame": "lead",
+      "model": "equivariant",
+      "n_train": 250,
+      "seed": 0,
+      "accuracy": 0.633,
+      "macro_f1": 0.625707803948185,
+      "macro_auroc": 0.8586391912194157
+    },
+    {
+      "noise_frame": "lead",
+      "model": "resnet",
+      "n_train": 250,
+      "seed": 0,
+      "accuracy": 0.579,
+      "macro_f1": 0.5671197677628923,
+      "macro_auroc": 0.8058474086980266
+    },
+    {
+      "noise_frame": "lead",
+      "model": "equivariant",
+      "n_train": 4000,
+      "seed": 0,
+      "accuracy": 0.779,
+      "macro_f1": 0.7763704599660622,
+      "macro_auroc": 0.9401673217154514
+    },
+    {
+      "noise_frame": "lead",
+      "model": "resnet",
+      "n_train": 4000,
+      "seed": 0,
+      "accuracy": 0.811,
+      "macro_f1": 0.8101717361585783,
+      "macro_auroc": 0.9524514965755179
+    },
+    {
+      "noise_frame": "heart",
+      "model": "equivariant",
+      "n_train": 250,
+      "seed": 0,
+      "accuracy": 0.635,
+      "macro_f1": 0.6241180046246663,
+      "macro_auroc": 0.8502877744888241
+    },
+    {
+      "noise_frame": "heart",
+      "model": "resnet",
+      "n_train": 250,
+      "seed": 0,
+      "accuracy": 0.58,
+      "macro_f1": 0.5648178898272119,
+      "macro_auroc": 0.8034041210242733
+    },
+    {
+      "noise_frame": "heart",
+      "model": "equivariant",
+      "n_train": 4000,
+      "seed": 0,
+      "accuracy": 0.811,
+      "macro_f1": 0.8094108916601126,
+      "macro_auroc": 0.9463428373558438
+    },
+    {
+      "noise_frame": "heart",
+      "model": "resnet",
+      "n_train": 4000,
+      "seed": 0,
+      "accuracy": 0.793,
+      "macro_f1": 0.790608005651387,
+      "macro_auroc": 0.9481300475131978
+    },
+    {
+      "noise_frame": "lead",
+      "model": "equivariant",
+      "n_train": 250,
+      "seed": 1,
+      "accuracy": 0.625,
+      "macro_f1": 0.6065286094687147,
+      "macro_auroc": 0.8290306333997747
+    },
+    {
+      "noise_frame": "lead",
+      "model": "resnet",
+      "n_train": 250,
+      "seed": 1,
+      "accuracy": 0.571,
+      "macro_f1": 0.5606608905404618,
+      "macro_auroc": 0.7911195378627804
+    },
+    {
+      "noise_frame": "lead",
+      "model": "equivariant",
+      "n_train": 4000,
+      "seed": 1,
+      "accuracy": 0.768,
+      "macro_f1": 0.7592079597215933,
+      "macro_auroc": 0.9319952032421985
+    },
+    {
+      "noise_frame": "lead",
+      "model": "resnet",
+      "n_train": 4000,
+      "seed": 1,
+      "accuracy": 0.805,
+      "macro_f1": 0.8011281559548886,
+      "macro_auroc": 0.9512451358840168
+    },
+    {
+      "noise_frame": "heart",
+      "model": "equivariant",
+      "n_train": 250,
+      "seed": 1,
+      "accuracy": 0.648,
+      "macro_f1": 0.6354554613375242,
+      "macro_auroc": 0.8463110234620331
+    },
+    {
+      "noise_frame": "heart",
+      "model": "resnet",
+      "n_train": 250,
+      "seed": 1,
+      "accuracy": 0.624,
+      "macro_f1": 0.6120116481761867,
+      "macro_auroc": 0.8430170472270666
+    },
+    {
+      "noise_frame": "heart",
+      "model": "equivariant",
+      "n_train": 4000,
+      "seed": 1,
+      "accuracy": 0.781,
+      "macro_f1": 0.7713707573291352,
+      "macro_auroc": 0.9374158069817695
+    },
+    {
+      "noise_frame": "heart",
+      "model": "resnet",
+      "n_train": 4000,
+      "seed": 1,
+      "accuracy": 0.802,
+      "macro_f1": 0.7982935496639305,
+      "macro_auroc": 0.9467024697138597
+    }
+  ],
+  "noise_anisotropy": {
+    "dower": 2.1058928702752855,
+    "kors": 4.801200843980369
+  }
+}

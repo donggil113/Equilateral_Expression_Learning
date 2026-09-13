@@ -78,19 +78,77 @@ so those two claims are not falsifiable on real data alone.
 
 ## Honest summary of findings
 
-- **Theorem 1 holds exactly.** The gauge construction is verified to `4e-15`, and the
-  equivariant-map dimension matches the Schur prediction for every channel count tried.
+**Theory — holds exactly.**
+- The gauge construction of Theorem 1 is verified to `4e-15`, and the dimension of the
+  equivariant linear maps matches the Schur-lemma prediction for every channel count
+  tried (26 = 1 + 25 for one channel).
 - **The claim that non-orthogonality breaks the generalisation theory is too strong as
-  usually stated.** In `L²(μ)` the Reynolds operator remains an orthogonal projection
-  regardless. The failure is in the *estimator's* geometry (RKHS / weight-decay norm),
-  where it becomes oblique; the repair and its exact constant `κ(T)^k` are given.
-- **H1 is only partially supported.** Equivariance is a clear win with few labels
-  (+0.08 macro-F1 at n=125) and roughly at parity with many (−0.01 at n=4000); the
-  crossover is reported rather than tuned away.
-- **One architectural detail dominates that comparison.** Without an equivariant
-  normalisation the gated nonlinearity starves the vector path (magnitudes decay ~80x
-  over four blocks), which reads as "equivariance doesn't scale". Fixing it moved
-  macro-F1 at n=4000 from 0.735 to 0.776.
-- **A strictly invariant model provably cannot represent pose-defined labels** such as
-  axis deviation. This is a theorem, not a disappointing result, and the
-  invariant⊕equivariant decomposition of Theorem 3 is what repairs it.
+  usually stated.** In `L²(μ)` the Reynolds operator remains an *orthogonal* projection
+  regardless of the action. The failure is in the *estimator's* geometry (RKHS /
+  weight-decay norm), where it becomes oblique (asymmetry 0.189 vs 0.000 in the gauge).
+  The repair and its exact constant `κ(T)^k` are given.
+- Theorem 3's three identifiability strata are confirmed numerically, including the
+  chirality ambiguity for planar VCG loops.
+
+**Architecture — the headline empirical fact.** Our model is invariant to float32
+round-off (`7e-7`); the standard orthogonal-lift assumption errs by `1.3e-1` and a
+conventional CNN by `0.80`. Five orders of magnitude.
+
+**H1 (sample efficiency) — NOT supported.** At matched parameters and a shared
+optimiser configuration, the equivariant model is within ±0.025 macro-F1 of the best
+baseline at every training-set size. There is no 10–100x data multiplier. A single
+seed in our pilot showed +0.08 at n=125; it did not replicate (three-seed spread at
+that size is ±0.026) and was noise.
+
+But two controls show the large-sample *deficit* is not a property of the symmetry:
+- **Capacity**: widening the equivariant model closes it entirely (0.779 → 0.798 at
+  n=4000, versus 0.794–0.796 for baselines at two widths). Matched parameters is not
+  matched capacity for these architectures.
+- **Learning rate**: with per-architecture tuning the ordering reverses at n=4000
+  (equivariant 0.799 at η=1e-2 vs baseline best 0.791). The usual shared-LR protocol
+  was costing the constrained model most of its apparent deficit.
+
+**H2 / Proposition 4 (nuisance leakage) — NOT supported for supervised encoders.** Every
+probe R² is indistinguishable from zero. A model trained end-to-end on invariant labels
+discards the pose, so the diagnostic is uninformative exactly where a label signal
+exists. The hypothesis conflated "the input contains the nuisance" with "the
+representation retains it". The self-supervised setting is where it has something to
+say.
+
+**H3 (robustness) — STRONGLY supported; the clearest empirical result.** In-group the
+equivariant model is exactly flat (0.749 at 60°, 90° and Haar) while baselines fall to
+0.47–0.52 under Haar. The advantage *persists out of group*, where equivariance offers
+no guarantee: LA–RA swap 0.726 vs 0.518–0.673; LA–LL 0.610 vs 0.390–0.576; strongest
+electrode displacement 0.728 vs 0.553–0.708. We did not predict this and do not claim
+to explain it.
+
+Notably the VCG-ResNet — same gauge, no constraint — is the *worst* model under every
+corruption. The coordinate change alone is not merely insufficient, it is harmful
+without the constraint that motivates it. That is the cleanest evidence that the
+contribution is the equivariance and not the inverse-Dower transform existing
+augmentation methods already use.
+
+**H4 (dipole breakdown) — partially supported.** The effect exists but is mild, and it
+hurts every model rather than selectively punishing the invariant one. The relaxed
+variant is uniformly best. One sub-claim fails cleanly: the learned symmetry-breaking
+weight does *not* track the non-dipolar fraction (0.208 → 0.178, if anything the wrong
+way), so it is a useful architecture but not a useful measuring instrument.
+
+**A strictly invariant model provably cannot represent pose-defined labels** such as
+axis deviation (AXIS recall 0.298 vs 0.808 for a CNN). This is a theorem, not a
+disappointing result, and the invariant ⊕ equivariant decomposition of Theorem 3 is
+what repairs it.
+
+**A fourth consequence of non-orthogonality, apparently new.** Isotropic noise in the
+*electrode* frame becomes anisotropic in heart-vector coordinates, with condition
+number exactly `κ(D)²` (2.11 Dower, 4.80 Kors), so the Bayes-optimal classifier is not
+exactly invariant even when the label is. Making the noise rotation-covariant shrinks
+the equivariant model's large-sample gap from −0.038 to −0.004 — about nine tenths of
+it. This is a concrete cost of exact invariance with no analogue in the orthogonal
+setting the literature assumes.
+
+**One architectural detail dominates all of the above.** Without an equivariant
+normalisation the gated nonlinearity starves the vector path (magnitudes decay ~80x
+over four blocks), which reads as "equivariance doesn't scale". Fixing it moved
+macro-F1 at n=4000 from 0.735 to 0.776. Any study reporting that an equivariant
+architecture underperforms should check this first.

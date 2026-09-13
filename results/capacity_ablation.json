@@ -1,0 +1,101 @@
+{
+  "rows": [
+    {
+      "model": "equivariant",
+      "width": 48,
+      "vector_width": 24,
+      "seed": 0,
+      "n_parameters": 176624,
+      "accuracy": 0.786,
+      "macro_f1": 0.7830217186641768,
+      "macro_auroc": 0.9412343125388587
+    },
+    {
+      "model": "equivariant",
+      "width": 72,
+      "vector_width": 36,
+      "seed": 0,
+      "n_parameters": 374126,
+      "accuracy": 0.786,
+      "macro_f1": 0.7815974245862998,
+      "macro_auroc": 0.9384858494954733
+    },
+    {
+      "model": "equivariant",
+      "width": 96,
+      "vector_width": 48,
+      "seed": 0,
+      "n_parameters": 644636,
+      "accuracy": 0.815,
+      "macro_f1": 0.815476336164756,
+      "macro_auroc": 0.9534422639492356
+    },
+    {
+      "model": "resnet",
+      "width": 53,
+      "seed": 0,
+      "n_parameters": 177298,
+      "accuracy": 0.793,
+      "macro_f1": 0.7907059798252257,
+      "macro_auroc": 0.9480145463897274
+    },
+    {
+      "model": "resnet",
+      "width": 106,
+      "seed": 0,
+      "n_parameters": 659858,
+      "accuracy": 0.794,
+      "macro_f1": 0.7952308346497683,
+      "macro_auroc": 0.950909324492309
+    },
+    {
+      "model": "equivariant",
+      "width": 48,
+      "vector_width": 24,
+      "seed": 1,
+      "n_parameters": 176624,
+      "accuracy": 0.786,
+      "macro_f1": 0.7753159469239029,
+      "macro_auroc": 0.9390369979729789
+    },
+    {
+      "model": "equivariant",
+      "width": 72,
+      "vector_width": 36,
+      "seed": 1,
+      "n_parameters": 374126,
+      "accuracy": 0.813,
+      "macro_f1": 0.8050767226773278,
+      "macro_auroc": 0.9473976483223607
+    },
+    {
+      "model": "equivariant",
+      "width": 96,
+      "vector_width": 48,
+      "seed": 1,
+      "n_parameters": 644636,
+      "accuracy": 0.789,
+      "macro_f1": 0.7799983701682973,
+      "macro_auroc": 0.9393020244833347
+    },
+    {
+      "model": "resnet",
+      "width": 53,
+      "seed": 1,
+      "n_parameters": 177298,
+      "accuracy": 0.805,
+      "macro_f1": 0.8011281559548886,
+      "macro_auroc": 0.9512451358840168
+    },
+    {
+      "model": "resnet",
+      "width": 106,
+      "seed": 1,
+      "n_parameters": 659858,
+      "accuracy": 0.797,
+      "macro_f1": 0.7930598832409215,
+      "macro_auroc": 0.9459857067714579
+    }
+  ],
+  "n_train": 4000
+}

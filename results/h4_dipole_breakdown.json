@@ -1,0 +1,292 @@
+{
+  "nondipolar_sweep": [
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.0,
+      "seed": 0,
+      "accuracy": 0.7775,
+      "macro_f1": 0.762383103609426,
+      "macro_auroc": 0.9329621663105938
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.0,
+      "seed": 0,
+      "accuracy": 0.78875,
+      "macro_f1": 0.7733150470269213,
+      "macro_auroc": 0.9368036410495599,
+      "learned_leak_weight": 0.21009568870067596
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.0,
+      "seed": 0,
+      "accuracy": 0.755,
+      "macro_f1": 0.7449756043550821,
+      "macro_auroc": 0.9274588501301826
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.1,
+      "seed": 0,
+      "accuracy": 0.76875,
+      "macro_f1": 0.755277822628214,
+      "macro_auroc": 0.9242642462038697
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.1,
+      "seed": 0,
+      "accuracy": 0.79625,
+      "macro_f1": 0.7804947928017538,
+      "macro_auroc": 0.9430925760573396,
+      "learned_leak_weight": 0.1792433261871338
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.1,
+      "seed": 0,
+      "accuracy": 0.7675,
+      "macro_f1": 0.7558519290905413,
+      "macro_auroc": 0.9296633106532868
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.25,
+      "seed": 0,
+      "accuracy": 0.76375,
+      "macro_f1": 0.7497034242893439,
+      "macro_auroc": 0.9194197402737233
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.25,
+      "seed": 0,
+      "accuracy": 0.7875,
+      "macro_f1": 0.7765495118561395,
+      "macro_auroc": 0.9331734790990519,
+      "learned_leak_weight": 0.1932385116815567
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.25,
+      "seed": 0,
+      "accuracy": 0.755,
+      "macro_f1": 0.7453388988272709,
+      "macro_auroc": 0.9184148501601362
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.5,
+      "seed": 0,
+      "accuracy": 0.7525,
+      "macro_f1": 0.7411373345699748,
+      "macro_auroc": 0.9207014690945139
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.5,
+      "seed": 0,
+      "accuracy": 0.7625,
+      "macro_f1": 0.7505044036658635,
+      "macro_auroc": 0.9246263487495892,
+      "learned_leak_weight": 0.18836428225040436
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.5,
+      "seed": 0,
+      "accuracy": 0.72625,
+      "macro_f1": 0.7158499258747394,
+      "macro_auroc": 0.9198379827380813
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.0,
+      "seed": 1,
+      "accuracy": 0.765,
+      "macro_f1": 0.7696986844184305,
+      "macro_auroc": 0.9234912541011676
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.0,
+      "seed": 1,
+      "accuracy": 0.7675,
+      "macro_f1": 0.7669997033769714,
+      "macro_auroc": 0.9321066860503577,
+      "learned_leak_weight": 0.2057650089263916
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.0,
+      "seed": 1,
+      "accuracy": 0.77375,
+      "macro_f1": 0.7772579528707743,
+      "macro_auroc": 0.9294206404128746
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.1,
+      "seed": 1,
+      "accuracy": 0.75125,
+      "macro_f1": 0.7451668643784046,
+      "macro_auroc": 0.9225618968803067
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.1,
+      "seed": 1,
+      "accuracy": 0.78375,
+      "macro_f1": 0.7779079154253257,
+      "macro_auroc": 0.9347786266906615,
+      "learned_leak_weight": 0.19944025576114655
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.1,
+      "seed": 1,
+      "accuracy": 0.76125,
+      "macro_f1": 0.754715244979817,
+      "macro_auroc": 0.9305751274540398
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.25,
+      "seed": 1,
+      "accuracy": 0.72375,
+      "macro_f1": 0.7201372182452519,
+      "macro_auroc": 0.9182637395460655
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.25,
+      "seed": 1,
+      "accuracy": 0.7775,
+      "macro_f1": 0.7737715951975364,
+      "macro_auroc": 0.9361674323420998,
+      "learned_leak_weight": 0.18056245148181915
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.25,
+      "seed": 1,
+      "accuracy": 0.74625,
+      "macro_f1": 0.7311271228044693,
+      "macro_auroc": 0.9346973696408797
+    },
+    {
+      "model": "equivariant",
+      "nondipolar_fraction": 0.5,
+      "seed": 1,
+      "accuracy": 0.77625,
+      "macro_f1": 0.7688813288149723,
+      "macro_auroc": 0.9291005654908142
+    },
+    {
+      "model": "equivariant-relaxed",
+      "nondipolar_fraction": 0.5,
+      "seed": 1,
+      "accuracy": 0.77375,
+      "macro_f1": 0.7613182993844979,
+      "macro_auroc": 0.9393351882373921,
+      "learned_leak_weight": 0.16772982478141785
+    },
+    {
+      "model": "resnet",
+      "nondipolar_fraction": 0.5,
+      "seed": 1,
+      "accuracy": 0.7525,
+      "macro_f1": 0.7508977295492801,
+      "macro_auroc": 0.930010105105058
+    }
+  ],
+  "pose_dependent_labels": [
+    {
+      "model": "equivariant",
+      "seed": 0,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.5975,
+      "macro_f1": 0.5676117971429951,
+      "macro_auroc": 0.8569955253382548,
+      "recall_AXIS": 0.22900763358778625,
+      "recall_pose_invariant_mean": 0.6540178880032935
+    },
+    {
+      "model": "equivariant-relaxed",
+      "seed": 0,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.6875,
+      "macro_f1": 0.678504136620829,
+      "macro_auroc": 0.9072000620984584,
+      "recall_AXIS": 0.7022900763358778,
+      "recall_pose_invariant_mean": 0.6728701988172169
+    },
+    {
+      "model": "resnet",
+      "seed": 0,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.705,
+      "macro_f1": 0.6983779054375754,
+      "macro_auroc": 0.9149512917931146,
+      "recall_AXIS": 0.7862595419847328,
+      "recall_pose_invariant_mean": 0.679347156727861
+    },
+    {
+      "model": "equivariant+pose-head",
+      "seed": 0,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.5775,
+      "macro_f1": 0.5595374978006549,
+      "macro_auroc": 0.848547295485561,
+      "recall_AXIS": 0.44274809160305345,
+      "recall_pose_invariant_mean": 0.5857303531652805
+    },
+    {
+      "model": "equivariant",
+      "seed": 1,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.5825,
+      "macro_f1": 0.5727184167219113,
+      "macro_auroc": 0.8538060017992162,
+      "recall_AXIS": 0.3660130718954248,
+      "recall_pose_invariant_mean": 0.6324595320902041
+    },
+    {
+      "model": "equivariant-relaxed",
+      "seed": 1,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.7425,
+      "macro_f1": 0.7380227207986211,
+      "macro_auroc": 0.9324456530837079,
+      "recall_AXIS": 0.7712418300653595,
+      "recall_pose_invariant_mean": 0.7372303290311378
+    },
+    {
+      "model": "resnet",
+      "seed": 1,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.725,
+      "macro_f1": 0.7232966522250804,
+      "macro_auroc": 0.9141789727538274,
+      "recall_AXIS": 0.8300653594771242,
+      "recall_pose_invariant_mean": 0.7001327226425618
+    },
+    {
+      "model": "equivariant+pose-head",
+      "seed": 1,
+      "task": "5-class incl. AXIS",
+      "accuracy": 0.57375,
+      "macro_f1": 0.57365800903983,
+      "macro_auroc": 0.8450118746508049,
+      "recall_AXIS": 0.39869281045751637,
+      "recall_pose_invariant_mean": 0.6159740491499086
+    }
+  ],
+  "fractions": [
+    0.0,
+    0.1,
+    0.25,
+    0.5
+  ]
+}

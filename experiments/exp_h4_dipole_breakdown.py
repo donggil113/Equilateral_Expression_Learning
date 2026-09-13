@@ -96,27 +96,37 @@ def part_b(seeds: int, steps: int, n_train: int) -> list[dict]:
             print(f"  [b] {label:20s} seed={seed} f1={overall['macro_f1']:.4f} "
                   f"AXIS_recall={rows[-1]['recall_AXIS']:.3f}", flush=True)
 
-        # The equivariant model with a pose head: invariant features for pathology,
-        # covariant features for orientation, as prescribed by Theorem 3.
-        model = make_model("equivariant", n_classes, predict_pose=True)
-        train_model(model, train, val,
-                    TrainConfig(steps=steps, seed=seed, patience=4, pose_weight=1.0),
-                    n_classes)
-        from eqecg.train import predict
-        out = predict(model, torch.as_tensor(test["x"]))
-        pred, y = out["logits"].argmax(1), np.asarray(test["y"])
-        overall = evaluate(model, torch.as_tensor(test["x"]), y, n_classes)
-        rows.append({
-            "model": "equivariant+pose-head", "seed": seed, "task": "5-class incl. AXIS",
-            **overall,
-            "recall_AXIS": float((pred[y == axis_idx] == axis_idx).mean()),
-            "recall_pose_invariant_mean": float(np.mean([
-                (pred[y == CLASS_NAMES.index(c)] == CLASS_NAMES.index(c)).mean()
-                for c in POSE_INVARIANT_CLASSES if (y == CLASS_NAMES.index(c)).any()
-            ])),
-        })
-        print(f"  [b] equivariant+pose-head seed={seed} f1={overall['macro_f1']:.4f} "
-              f"AXIS_recall={rows[-1]['recall_AXIS']:.3f}", flush=True)
+        # The architecture that actually embodies the decomposition of Theorem 3:
+        # the invariant features carry pathology, and the *equivariant* (time-pooled
+        # vector) features are exposed to the classifier as well, so orientation-
+        # defined labels become representable.  A pose head alone does not achieve
+        # this -- its prediction never reaches the classifier, whose features remain
+        # strictly invariant -- which is why both are measured.
+        for label in ("equivariant-pose-aware", "equivariant+pose-head"):
+            if label == "equivariant-pose-aware":
+                model = make_model(label, n_classes)
+                cfg = TrainConfig(steps=steps, seed=seed, patience=4)
+            else:
+                model = make_model("equivariant", n_classes, predict_pose=True)
+                cfg = TrainConfig(steps=steps, seed=seed, patience=4, pose_weight=1.0)
+            train_model(model, train, val, cfg, n_classes)
+            from eqecg.train import predict
+
+            out = predict(model, torch.as_tensor(test["x"]))
+            pred, y = out["logits"].argmax(1), np.asarray(test["y"])
+            overall = evaluate(model, torch.as_tensor(test["x"]), y, n_classes)
+            rows.append({
+                "model": label, "seed": seed, "task": "5-class incl. AXIS",
+                **overall,
+                "recall_AXIS": float((pred[y == axis_idx] == axis_idx).mean()),
+                "recall_pose_invariant_mean": float(np.mean([
+                    (pred[y == CLASS_NAMES.index(c)] == CLASS_NAMES.index(c)).mean()
+                    for c in POSE_INVARIANT_CLASSES if (y == CLASS_NAMES.index(c)).any()
+                ])),
+            })
+            print(f"  [b] {label:22s} seed={seed} f1={overall['macro_f1']:.4f} "
+                  f"AXIS_recall={rows[-1]['recall_AXIS']:.3f}", flush=True)
+
     return rows
 
 

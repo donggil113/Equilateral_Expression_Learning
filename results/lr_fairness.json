@@ -1,0 +1,117 @@
+{
+  "rows": [
+    {
+      "model": "equivariant",
+      "n_train": 250,
+      "lr": 0.001,
+      "seed": 0,
+      "accuracy": 0.641,
+      "macro_f1": 0.6354750502320556,
+      "macro_auroc": 0.8520995916207929
+    },
+    {
+      "model": "equivariant",
+      "n_train": 250,
+      "lr": 0.003,
+      "seed": 0,
+      "accuracy": 0.622,
+      "macro_f1": 0.6112360583024026,
+      "macro_auroc": 0.8522307167322285
+    },
+    {
+      "model": "equivariant",
+      "n_train": 250,
+      "lr": 0.01,
+      "seed": 0,
+      "accuracy": 0.656,
+      "macro_f1": 0.6484473967748706,
+      "macro_auroc": 0.856403984380557
+    },
+    {
+      "model": "resnet",
+      "n_train": 250,
+      "lr": 0.001,
+      "seed": 0,
+      "accuracy": 0.57,
+      "macro_f1": 0.5568000512491162,
+      "macro_auroc": 0.8060536077716646
+    },
+    {
+      "model": "resnet",
+      "n_train": 250,
+      "lr": 0.003,
+      "seed": 0,
+      "accuracy": 0.579,
+      "macro_f1": 0.5671197677628923,
+      "macro_auroc": 0.8058474086980266
+    },
+    {
+      "model": "resnet",
+      "n_train": 250,
+      "lr": 0.01,
+      "seed": 0,
+      "accuracy": 0.643,
+      "macro_f1": 0.6408454490261491,
+      "macro_auroc": 0.8617711439361051
+    },
+    {
+      "model": "equivariant",
+      "n_train": 4000,
+      "lr": 0.001,
+      "seed": 0,
+      "accuracy": 0.777,
+      "macro_f1": 0.7700328312899064,
+      "macro_auroc": 0.9372732019473384
+    },
+    {
+      "model": "equivariant",
+      "n_train": 4000,
+      "lr": 0.003,
+      "seed": 0,
+      "accuracy": 0.779,
+      "macro_f1": 0.7763704599660622,
+      "macro_auroc": 0.9401673217154514
+    },
+    {
+      "model": "equivariant",
+      "n_train": 4000,
+      "lr": 0.01,
+      "seed": 0,
+      "accuracy": 0.801,
+      "macro_f1": 0.7987815068934669,
+      "macro_auroc": 0.9497681221973605
+    },
+    {
+      "model": "resnet",
+      "n_train": 4000,
+      "lr": 0.001,
+      "seed": 0,
+      "accuracy": 0.781,
+      "macro_f1": 0.7753317653207596,
+      "macro_auroc": 0.9420542006135948
+    },
+    {
+      "model": "resnet",
+      "n_train": 4000,
+      "lr": 0.003,
+      "seed": 0,
+      "accuracy": 0.793,
+      "macro_f1": 0.7907059798252257,
+      "macro_auroc": 0.9480145463897274
+    },
+    {
+      "model": "resnet",
+      "n_train": 4000,
+      "lr": 0.01,
+      "seed": 0,
+      "accuracy": 0.754,
+      "macro_f1": 0.7494300357055599,
+      "macro_auroc": 0.9235637690331351
+    }
+  ],
+  "learning_rates": [
+    0.001,
+    0.003,
+    0.01
+  ]
+}

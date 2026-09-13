@@ -1,0 +1,149 @@
+[
+  {
+    "n_train": 60,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.4584971381479324,
+    "baseline_records_needed": 69.29801977287995,
+    "multiplier": 1.1549669962146658
+  },
+  {
+    "n_train": 60,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.4584971381479324,
+    "baseline_records_needed": 65.96487861905433,
+    "multiplier": 1.0994146436509056
+  },
+  {
+    "n_train": 60,
+    "baseline": "resnet",
+    "equivariant_f1": 0.4584971381479324,
+    "baseline_records_needed": 59.999999999999986,
+    "multiplier": 0.9999999999999998
+  },
+  {
+    "n_train": 125,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.5230911215562232,
+    "baseline_records_needed": 123.63910692505615,
+    "multiplier": 0.9891128554004492
+  },
+  {
+    "n_train": 125,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.5230911215562232,
+    "baseline_records_needed": 160.7167693749084,
+    "multiplier": 1.2857341549992674
+  },
+  {
+    "n_train": 125,
+    "baseline": "resnet",
+    "equivariant_f1": 0.5230911215562232,
+    "baseline_records_needed": 166.9966747632683,
+    "multiplier": 1.3359733981061463
+  },
+  {
+    "n_train": 250,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.6132437927925674,
+    "baseline_records_needed": 287.0982294654203,
+    "multiplier": 1.1483929178616812
+  },
+  {
+    "n_train": 250,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.6132437927925674,
+    "baseline_records_needed": 339.3387647210394,
+    "multiplier": 1.3573550588841576
+  },
+  {
+    "n_train": 250,
+    "baseline": "resnet",
+    "equivariant_f1": 0.6132437927925674,
+    "baseline_records_needed": 330.9962692410097,
+    "multiplier": 1.3239850769640389
+  },
+  {
+    "n_train": 500,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.6837869062034302,
+    "baseline_records_needed": 643.0689722222181,
+    "multiplier": 1.2861379444444363
+  },
+  {
+    "n_train": 500,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.6837869062034302,
+    "baseline_records_needed": 701.1656120105025,
+    "multiplier": 1.402331224021005
+  },
+  {
+    "n_train": 500,
+    "baseline": "resnet",
+    "equivariant_f1": 0.6837869062034302,
+    "baseline_records_needed": 582.1098579477981,
+    "multiplier": 1.1642197158955963
+  },
+  {
+    "n_train": 1000,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.7335411501504262,
+    "baseline_records_needed": 954.3527721401188,
+    "multiplier": 0.9543527721401187
+  },
+  {
+    "n_train": 1000,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.7335411501504262,
+    "baseline_records_needed": 1646.6814152546456,
+    "multiplier": 1.6466814152546456
+  },
+  {
+    "n_train": 1000,
+    "baseline": "resnet",
+    "equivariant_f1": 0.7335411501504262,
+    "baseline_records_needed": 1123.6850113352532,
+    "multiplier": 1.1236850113352532
+  },
+  {
+    "n_train": 2000,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.7453965076882293,
+    "baseline_records_needed": 1212.5016772937734,
+    "multiplier": 0.6062508386468867
+  },
+  {
+    "n_train": 2000,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.7453965076882293,
+    "baseline_records_needed": 2089.6521217515938,
+    "multiplier": 1.0448260608757969
+  },
+  {
+    "n_train": 2000,
+    "baseline": "resnet",
+    "equivariant_f1": 0.7453965076882293,
+    "baseline_records_needed": 1378.2601293602218,
+    "multiplier": 0.6891300646801108
+  },
+  {
+    "n_train": 4000,
+    "baseline": "resnet-aug",
+    "equivariant_f1": 0.7760051679214612,
+    "baseline_records_needed": 2676.6685108781303,
+    "multiplier": 0.6691671277195326
+  },
+  {
+    "n_train": 4000,
+    "baseline": "vcg-resnet",
+    "equivariant_f1": 0.7760051679214612,
+    "baseline_records_needed": 3233.78475320207,
+    "multiplier": 0.8084461883005175
+  },
+  {
+    "n_train": 4000,
+    "baseline": "resnet",
+    "equivariant_f1": 0.7760051679214612,
+    "baseline_records_needed": 2417.5053095635963,
+    "multiplier": 0.6043763273908991
+  }
+]

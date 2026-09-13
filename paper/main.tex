@@ -499,10 +499,31 @@ optimisation budget.}
 \end{figure}
 
 \begin{table}[t]\centering
-\caption{H1: test macro-F1 by training-set size.}
+\caption{H1: test macro-F1 by training-set size, mean $\pm$ s.d.\ over three seeds.}
 \label{tab:h1}
 \input{tables/h1}
 \end{table}
+
+\textbf{H1 as stated is not supported.} Under a shared optimiser configuration and
+matched parameters, the equivariant model lies within $\pm 0.025$ macro-F1 of the best
+baseline at every training-set size: it leads by $+0.010$ and $+0.012$ at $n = 250$ and
+$n = 500$, and trails by $0.006$ to $0.024$ for $n \ge 1000$. There is no data
+multiplier remotely resembling the $10$--$100\times$ the hypothesis proposed, and the
+small-sample advantage is not large enough relative to seed variance to be claimed.
+We note this explicitly because a single seed in our own pilot showed a $+0.08$ gap at
+$n = 125$ that vanished under replication: the three-seed spread at that size is
+$\pm 0.026$, and the effect was noise.
+
+Two controls, however, show that the large-sample \emph{deficit} is not a property of
+the symmetry. Widening the equivariant model (Table~\ref{tab:capacity}) closes it
+entirely --- at width $96$ it reaches $0.798$ against $0.794$--$0.796$ for baselines at
+both widths tried --- so the gap at matched parameter count reflects the
+\emph{efficiency of the parameterisation}, not an inability to express the target.
+And allowing each architecture its own learning rate (Table~\ref{tab:lr}) reverses the
+ordering at $n = 4000$: the equivariant model attains $0.799$ at $\eta = 10^{-2}$ while
+the baseline peaks at $0.791$ and actually degrades to $0.749$ at that step size. A
+shared learning rate, the usual protocol, was quietly costing the constrained model
+most of its apparent deficit.
 
 \subsection{H2 / Proposition 4: how much capacity goes to the nuisance}
 
@@ -515,10 +536,21 @@ exactly invariant encoder the probe $R^2$ is zero identically.
 
 \begin{table}[t]\centering
 \caption{Held-out $R^2$ of a ridge probe predicting the applied nuisance rotation from
-each encoder's embedding.}
+each \emph{supervised} encoder's embedding.}
 \label{tab:h2}
 \input{tables/h2_probe}
 \end{table}
+
+\textbf{H2 is not supported for supervised encoders, and the reason is instructive.}
+Every probe $R^2$ in Table~\ref{tab:h2} is statistically indistinguishable from zero
+($-0.011$ to $+0.017$), including for the unaugmented CNN, where H2 predicted
+$R^2 > 0.5$. In hindsight this is what should have been expected: a model trained
+end-to-end to predict labels that are invariant has every incentive to discard the
+pose, and it does. The hypothesis conflated "the input contains the nuisance" with
+"the representation retains it". The diagnostic is therefore uninformative exactly
+where a label signal is present, which is why the setting it was designed for --- and
+where it does have something to say --- is self-supervised pre-training, reported
+next.
 
 \paragraph{The diagnostic in its intended setting.} Proposition~\ref{prop:probe} is
 aimed at \emph{pretrained} encoders, so we also apply it to encoders trained with a
@@ -551,6 +583,30 @@ reversal is not a group element.}
 \label{fig:h3}
 \end{figure}
 
+\textbf{H3 is strongly supported, and it is the paper's clearest empirical result.}
+In-group, the equivariant model is exactly flat: $0.749$ at $60^\circ$, at $90^\circ$
+and under Haar rotation, identical to its clean score, because invariance is a
+property of the architecture and not of the training distribution. Every baseline
+degrades sharply --- the plain CNN from $0.742$ to $0.469$ and the rotation-augmented
+CNN from $0.748$ to $0.521$ under Haar rotation. Augmentation buys robustness only
+over the range it sampled, which is the expected but rarely measured failure mode.
+
+More interesting is that the advantage \emph{persists out of group}, where
+equivariance offers no guarantee whatever. Under the LA--RA electrode swap --- at
+relative distance $0.29$ from the nearest group element --- the equivariant model
+scores $0.726$ against $0.518$--$0.673$; under the harsher LA--LL swap $0.610$ against
+$0.390$--$0.576$; under the strongest electrode displacement $0.728$ against
+$0.553$--$0.708$. We did not predict this and do not claim to have explained it; the
+natural conjecture is that a representation built from rotation invariants is less
+sensitive to \emph{any} perturbation of lead geometry, but that is a hypothesis for
+future work rather than a result.
+
+Note also that the VCG-ResNet --- same gauge, no symmetry constraint --- is the
+\emph{worst} model under every corruption. The coordinate change alone is not merely
+insufficient; it is actively harmful without the constraint that motivates it. This is
+the cleanest evidence we have that the contribution is the equivariance and not the
+inverse-Dower transform that existing augmentation methods already use.
+
 \subsection{H4: when the dipole model --- or the invariance --- is wrong}\label{sec:h4}
 
 \begin{figure}[t]\centering
@@ -565,6 +621,20 @@ symmetry-breaking weight of the relaxed model.}
 \label{tab:h4a}
 \input{tables/h4_nondipolar}
 \end{table}
+
+H4 anticipated that strict invariance would become a liability as the dipole model
+degraded. The effect exists but is mild: the strictly equivariant model falls from
+$0.766$ to $0.735$ as $\eta$ rises to $0.25$, and the plain CNN falls comparably
+($0.761 \to 0.738$), so within this range non-dipolar energy hurts every model rather
+than selectively punishing the invariant one. The approximately equivariant variant is
+uniformly the best model in the sweep ($0.756$--$0.779$), which supports the
+prescribed fallback.
+
+One sub-claim of H4 fails cleanly and we report it as such: we had expected the learned
+symmetry-breaking weight to \emph{measure} how much symmetry the data has, and it does
+not. It is essentially flat in $\eta$, drifting from $0.208$ to $0.178$ --- if anything
+in the wrong direction. The relaxed model is a useful architecture; its leak weight is
+not a useful instrument.
 
 \begin{table}[t]\centering
 \caption{H4(b): the pose-defined \textsc{axis} class. A strictly invariant model
@@ -590,6 +660,15 @@ frame (where exact invariance is optimal).}
 \input{tables/noise_frame}
 \end{table}
 
+The mechanism is confirmed. At $n = 4000$ the equivariant model trails the baseline by
+$0.038$ under electrode-frame noise but by only $0.004$ once the noise is made
+rotation-covariant --- roughly nine tenths of the large-sample deficit is attributable
+to the anisotropy of Remark~\ref{rem:noise} rather than to the architecture. At
+$n = 250$ the equivariant model leads in both frames. We regard this as the most
+useful negative-looking result in the paper: it identifies a concrete, quantifiable
+cost of exact invariance that is specific to non-orthogonal actions and has no
+analogue in the orthogonal setting the literature assumes.
+
 \subsection{Is the comparison confounded by a shared learning rate?}
 
 A constrained model may simply want a different step size, and reporting a deficit
@@ -611,6 +690,13 @@ explanations for its large-sample deficit.}
 \label{tab:capacity}
 \input{tables/capacity}
 \end{table}
+
+The answer is capacity, not bias. The equivariant model improves monotonically with
+width ($0.779 \to 0.793 \to 0.798$) and overtakes both baseline widths, while the
+baseline is saturated --- doubling its width changes nothing ($0.796 \to 0.794$). A
+matched \emph{parameter count} is therefore not a matched \emph{capacity} for these two
+architectures, and reporting only the matched-parameter comparison would have
+misattributed an efficiency-of-parameterisation gap to the symmetry constraint.
 
 \section{Limitations}
 
