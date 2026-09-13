@@ -21,3 +21,8 @@
   [resnet-aug   n= 4000 seed=0] test_f1=0.7945 (119s)
   [resnet       n=   60 seed=0] test_f1=0.4895 (332s)
   [resnet       n=  125 seed=0] test_f1=0.5315 (14s)
+  [resnet       n=  250 seed=0] test_f1=0.5833 (17s)
+  [resnet       n=  500 seed=0] test_f1=0.6867 (17s)
+  [resnet       n= 1000 seed=0] test_f1=0.7391 (16s)
+  [resnet       n= 2000 seed=0] test_f1=0.7404 (15s)
+  [resnet       n= 4000 seed=0] test_f1=0.7862 (17s)
