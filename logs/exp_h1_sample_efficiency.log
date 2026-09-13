@@ -26,3 +26,4 @@
   [resnet       n= 1000 seed=0] test_f1=0.7391 (16s)
   [resnet       n= 2000 seed=0] test_f1=0.7404 (15s)
   [resnet       n= 4000 seed=0] test_f1=0.7862 (17s)
+  [equivariant  n=   60 seed=1] test_f1=0.5297 (82s)

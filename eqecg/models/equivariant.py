@@ -44,6 +44,7 @@ from eqecg.leads import GEOMETRY, LeadGeometry
 __all__ = [
     "GaugeLift",
     "NaiveOrthogonalLift",
+    "VectorNorm",
     "GVPBlock",
     "EquivariantECGNet",
     "gram_features",
@@ -92,6 +93,31 @@ class NaiveOrthogonalLift(nn.Module):
         return v, s
 
 
+class VectorNorm(nn.Module):
+    """Equivariant normalisation for vector channels -- the ``l=1`` analogue of LayerNorm.
+
+    Without it the architecture has a real defect: the gated nonlinearity multiplies
+    vectors by a sigmoid, which is always below one, so vector magnitudes decay
+    geometrically with depth (measured: a factor of ~80 over four blocks) while the
+    scalar stream stays healthy under its GroupNorm.  The vector path is then starved
+    and the model degenerates towards its scalar half, which would look like evidence
+    that equivariance is unhelpful when it is really a normalisation bug.
+
+    Each channel is divided by the root-mean-square of its norm over time.  That
+    divisor is an *invariant* scalar, so the operation commutes with the group action
+    and equivariance is preserved exactly.
+    """
+
+    def __init__(self, channels: int, eps: float = 1e-5):
+        super().__init__()
+        self.gain = nn.Parameter(torch.ones(channels))
+        self.eps = eps
+
+    def forward(self, v: torch.Tensor) -> torch.Tensor:
+        scale = v.pow(2).sum(dim=2).mean(dim=-1, keepdim=True).sqrt()   # (B, C, 1)
+        return v / (scale.unsqueeze(-1) + self.eps) * self.gain[None, :, None, None]
+
+
 class GVPBlock(nn.Module):
     """One equivariant block: temporal convolution, tensor products, gated nonlinearity."""
 
@@ -113,6 +139,7 @@ class GVPBlock(nn.Module):
 
         # Vector path: shared across the three components, and strictly bias-free.
         self.vector_conv = nn.Conv1d(cv_in, cv_out, kernel, stride, pad, bias=False)
+        self.vector_norm = VectorNorm(cv_out)
         # Learned mixes whose inner/cross products supply invariants and pseudo-vectors.
         self.mix_a = nn.Conv1d(cv_out, n_pairs, 1, bias=False)
         self.mix_b = nn.Conv1d(cv_out, n_pairs, 1, bias=False)
@@ -135,7 +162,7 @@ class GVPBlock(nn.Module):
         return v.reshape(B, 3, v.shape[1], v.shape[2]).permute(0, 2, 1, 3)
 
     def forward(self, v: torch.Tensor, s: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        v = self._channel_conv(self.vector_conv, v)          # (B, cv_out, 3, T')
+        v = self.vector_norm(self._channel_conv(self.vector_conv, v))  # (B, cv_out, 3, T')
         a = self._channel_conv(self.mix_a, v)
         b = self._channel_conv(self.mix_b, v)
 

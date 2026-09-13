@@ -50,7 +50,7 @@ class ResNet1D(nn.Module):
         self,
         n_classes: int = 5,
         in_channels: int = 12,
-        width: int = 46,
+        width: int = 53,
         depth: int = 4,
         kernel: int = 9,
         strides: tuple[int, ...] = (4, 2, 2, 2),

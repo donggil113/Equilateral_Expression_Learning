@@ -41,7 +41,7 @@ def main(seeds: int = 2, steps: int = 800, n_train: int = 4000) -> dict:
                          "seed": seed, "n_parameters": info["n_parameters"], **m})
             print(f"  [width={width:3d}] seed={seed} params={info['n_parameters']:7d} "
                   f"f1={m['macro_f1']:.4f}", flush=True)
-        for width in (46, 92):
+        for width in (53, 106):
             model = make_model("resnet", n_classes, width=width)
             info = train_model(model, train, val,
                                TrainConfig(steps=steps, seed=seed, patience=5), n_classes)
