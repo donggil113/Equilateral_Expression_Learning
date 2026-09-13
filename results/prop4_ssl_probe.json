@@ -1,0 +1,193 @@
+{
+  "probes": [
+    {
+      "encoder": "cnn-ssl",
+      "seed": 0,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        0.1825447678565979,
+        0.19469285011291504,
+        0.20144832134246826
+      ],
+      "r2_mean": 0.19289530813694,
+      "n_fit": 500,
+      "n_eval": 500
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 0,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        -0.00892949104309082,
+        0.0005466938018798828,
+        -0.007413148880004883
+      ],
+      "r2_mean": -0.005265315528959036,
+      "n_fit": 500,
+      "n_eval": 500
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 0,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        -0.005691170692443848,
+        -0.012557506561279297,
+        -0.01760125160217285
+      ],
+      "r2_mean": -0.011949975974857807,
+      "n_fit": 500,
+      "n_eval": 500
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 1,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        0.16847771406173706,
+        0.09464055299758911,
+        0.25360578298568726
+      ],
+      "r2_mean": 0.17224134504795074,
+      "n_fit": 500,
+      "n_eval": 500
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 1,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        0.0037050247192382812,
+        -0.011391878128051758,
+        -0.001649618148803711
+      ],
+      "r2_mean": -0.0031121571082621813,
+      "n_fit": 500,
+      "n_eval": 500
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 1,
+      "target": "rotation_vector",
+      "r2_per_dim": [
+        -0.012256503105163574,
+        -0.007067203521728516,
+        -0.005426645278930664
+      ],
+      "r2_mean": -0.008250117301940918,
+      "n_fit": 500,
+      "n_eval": 500
+    }
+  ],
+  "linear_eval": [
+    {
+      "encoder": "cnn-ssl",
+      "seed": 0,
+      "n_labels": 100,
+      "macro_f1": 0.2708308250156752
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 0,
+      "n_labels": 500,
+      "macro_f1": 0.2524241310618389
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 0,
+      "n_labels": 2000,
+      "macro_f1": 0.3090389579655649
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 0,
+      "n_labels": 100,
+      "macro_f1": 0.4531776532019056
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 0,
+      "n_labels": 500,
+      "macro_f1": 0.5111627758483608
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 0,
+      "n_labels": 2000,
+      "macro_f1": 0.5324157297725842
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 0,
+      "n_labels": 100,
+      "macro_f1": 0.5420541077712344
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 0,
+      "n_labels": 500,
+      "macro_f1": 0.616410288792351
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 0,
+      "n_labels": 2000,
+      "macro_f1": 0.6452061229647159
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 1,
+      "n_labels": 100,
+      "macro_f1": 0.2946923673043833
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 1,
+      "n_labels": 500,
+      "macro_f1": 0.2751607025581818
+    },
+    {
+      "encoder": "cnn-ssl",
+      "seed": 1,
+      "n_labels": 2000,
+      "macro_f1": 0.31257125819916515
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 1,
+      "n_labels": 100,
+      "macro_f1": 0.36325786417422157
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 1,
+      "n_labels": 500,
+      "macro_f1": 0.40261412898242366
+    },
+    {
+      "encoder": "cnn-ssl+rot-aug",
+      "seed": 1,
+      "n_labels": 2000,
+      "macro_f1": 0.43579610950676306
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 1,
+      "n_labels": 100,
+      "macro_f1": 0.4630609991737932
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 1,
+      "n_labels": 500,
+      "macro_f1": 0.5364045290345575
+    },
+    {
+      "encoder": "equivariant-ssl",
+      "seed": 1,
+      "n_labels": 2000,
+      "macro_f1": 0.6205153295843504
+    }
+  ],
+  "n_unlabelled": 3000
+}

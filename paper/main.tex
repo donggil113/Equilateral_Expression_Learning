@@ -567,6 +567,25 @@ equivariant encoder, whose $R^2$ is zero by construction.
 \input{tables/prop4}
 \end{table}
 
+Here the diagnostic does its job. The conventionally pretrained CNN leaks pose
+($R^2 = 0.183 \pm 0.010$), rotation augmentation removes the leak
+($-0.004 \pm 0.001$), and the equivariant encoder is at zero by construction
+($-0.010 \pm 0.002$). The leakage is far below the $R^2 > 0.5$ that H2 predicted, so
+the hypothesis is not supported at the magnitude it claimed --- but the ordering it
+implies is exactly right, and the downstream consequence is large. Linear evaluation on
+the frozen representation at $2000$ labels gives $0.311$ for the leaky encoder, $0.484$
+once augmentation removes the leak, and $0.633$ for the equivariant one; the ranking is
+identical at every label budget and the gap widens with more labels. Probe $R^2$ and
+downstream quality are perfectly anti-correlated across the three encoders.
+
+We draw a deliberately narrow conclusion. Three encoders do not establish a law, and
+the equivariant encoder differs from the others in more than its leakage. What the
+experiment does show is that the diagnostic is measuring something that matters in the
+regime it was designed for, and that a contrastive objective with no label pressure to
+discard the pose will retain it --- which is precisely the regime that large ECG
+foundation models occupy. Applying the probe to a released ECG foundation model is the
+obvious next step and requires only an embedding matrix; the code path is the same.
+
 \subsection{H3: robustness under in-group and out-of-group corruption}
 
 \begin{table}[t]\centering
