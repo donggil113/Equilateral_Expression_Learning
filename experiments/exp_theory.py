@@ -16,6 +16,7 @@ from eqecg.theory.identifiability import identifiability_report
 from eqecg.theory.intertwiners import (
     equivariant_linear_basis,
     metric_condition_number,
+    polynomial_norm_distortion,
     predicted_intertwiner_dimension,
     reynolds_quadratic,
     reynolds_quadratic_exact,
@@ -82,6 +83,9 @@ def main() -> dict:
 
     table = invariant_fraction_table([1, 2, 4, 8], max_degree=4)
     out["theorem2_dimension_table"] = table
+    # The constant by which the bound degrades when transported from the gauge back
+    # to the Euclidean parameterisation.
+    out["theorem2_norm_distortion"] = polynomial_norm_distortion(max_degree=4)
     out["theorem2_monte_carlo_check"] = [
         {
             "n_vector": m,

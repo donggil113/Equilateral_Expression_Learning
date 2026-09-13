@@ -21,4 +21,5 @@ run exp_h1_sample_efficiency --seeds 3 --steps 800
 run exp_h2_h3_probe_robustness --seeds 3 --steps 900
 run exp_h4_dipole_breakdown --seeds 2 --steps 700
 run exp_capacity_ablation --seeds 2
+run exp_lr_fairness
 echo "ALL DONE $(date -u +%H:%M:%S)"

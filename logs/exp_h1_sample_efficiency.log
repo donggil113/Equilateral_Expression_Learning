@@ -2,3 +2,5 @@
   [equivariant  n=  125 seed=0] test_f1=0.5746 (97s)
   [equivariant  n=  250 seed=0] test_f1=0.5670 (61s)
   [equivariant  n=  500 seed=0] test_f1=0.6211 (84s)
+  [equivariant  n= 1000 seed=0] test_f1=0.6397 (97s)
+  [equivariant  n= 2000 seed=0] test_f1=0.6587 (102s)

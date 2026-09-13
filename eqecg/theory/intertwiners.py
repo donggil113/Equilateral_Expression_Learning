@@ -100,11 +100,11 @@ def equivariant_linear_basis(
 
     C = np.concatenate(rows, axis=0)
     _, s, Vt = np.linalg.svd(C)
-    null = Vt[np.sum(s > tol * max(C.shape) * s[0] if s.size else 0):]
-    # Guard against the degenerate all-zero-singular-value case.
+    # Right-singular vectors whose singular value is numerically zero span the null
+    # space; Vt can be taller than s, so pad before comparing.
     thresh = tol * max(C.shape) * (s[0] if s.size else 1.0)
-    null = Vt[np.concatenate([s, np.zeros(Vt.shape[0] - s.size)]) <= thresh]
-    return null.reshape(-1, n_out, n_in)
+    padded = np.concatenate([s, np.zeros(Vt.shape[0] - s.size)])
+    return Vt[padded <= thresh].reshape(-1, n_out, n_in)
 
 
 def predicted_intertwiner_dimension(channels_in: int = 1, channels_out: int = 1) -> int:

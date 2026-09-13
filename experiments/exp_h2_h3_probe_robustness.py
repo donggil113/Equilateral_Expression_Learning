@@ -85,18 +85,18 @@ def corrupt(test: dict, kind: str, strength, rng) -> torch.Tensor:
         T = torch.tensor(lead_reversal_matrix(strength), dtype=torch.float32)
         return torch.einsum("ij,bjt->bit", T, x)
     if kind == "displacement":
-        # Re-synthesise the observation with a perturbed transform matrix: the true
-        # heart vector is unchanged, only the electrode geometry moved.
-        out = torch.empty_like(x)
-        v = torch.as_tensor(test["v_true"])
-        R = torch.as_tensor(test["R"])
-        for i in range(len(x)):
-            Dp = torch.tensor(
-                electrode_displacement_transform(rng, strength), dtype=torch.float32
-            )
-            out[i] = Dp @ (R[i] @ v[i])
+        # Re-project the *observed* signal through a perturbed transform matrix:
+        # x -> D' D^+ x + P_res x.  Re-synthesising from the latent heart vector
+        # instead would silently also strip the noise, which would flatter whichever
+        # model is most noise-sensitive rather than measuring displacement robustness.
+        Dp = torch.tensor(
+            electrode_displacement_transform(rng, strength), dtype=torch.float32
+        )
+        Dpinv = torch.tensor(geo.D_pinv, dtype=torch.float32)
+        Pres = torch.tensor(geo.P_res, dtype=torch.float32)
         P8 = torch.tensor(geo.P8, dtype=torch.float32)
-        return torch.einsum("ij,bjt->bit", P8, out)
+        A = P8 @ (Dp @ Dpinv + Pres)
+        return torch.einsum("ij,bjt->bit", A, x)
     raise ValueError(kind)
 
 

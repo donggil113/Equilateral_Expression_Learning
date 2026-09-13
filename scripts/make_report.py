@@ -138,6 +138,19 @@ $m$ samples & degree $k$ & $\\dim\\Sym^k V$ & $\\dim(\\Sym^k V)^G$ & removed \\\
 \\bottomrule
 \\end{{tabular}}""")
 
+    if "theorem2_norm_distortion" in d:
+        rows = "\n".join(
+            f"  {r['degree']} & {r['condition_number']:.3f} \\\\"
+            for r in d["theorem2_norm_distortion"]
+        )
+        _tex(TABLES / "distortion.tex", """\\begin{tabular}{cc}
+\\toprule
+feature degree $k$ & congruence condition number $\\kappa(T)^k$ \\\\
+\\midrule
+""" + rows + """
+\\bottomrule
+\\end{tabular}""")
+
     rows = "\n".join(
         f"  {r['trajectory_rank']} & {r['noise_sigma']:.2f} & {r['pose_error_deg_mean']:.2f} & "
         f"{r['pose_error_deg_p95']:.2f} & {r['chirality_signal']:.4f} \\\\"
