@@ -393,12 +393,60 @@ Model & width & parameters & test macro-F1 \\\\
 \\end{tabular}""")
 
 
+def noise_frame_table(d: dict) -> None:
+    agg = _mean_std(d["rows"], ("noise_frame", "model", "n_train"), "macro_f1")
+    sizes = sorted({r["n_train"] for r in d["rows"]})
+    body = []
+    for frame in ("lead", "heart"):
+        for m in ("equivariant", "resnet"):
+            cells = [f"{agg[(frame,m,n)][0]:.3f}" if (frame, m, n) in agg else "--"
+                     for n in sizes]
+            body.append(f"  {frame} & {LABELS.get(m,m)} & " + " & ".join(cells) + " \\\\")
+        gaps = []
+        for n in sizes:
+            a, b = (frame, "equivariant", n), (frame, "resnet", n)
+            gaps.append(f"{agg[a][0]-agg[b][0]:+.3f}" if a in agg and b in agg else "--")
+        body.append("  \\multicolumn{2}{l}{\\quad gap (equiv.\\ $-$ ResNet)} & "
+                    + " & ".join(gaps) + " \\\\")
+        body.append("  \\midrule" if frame == "lead" else "")
+    header = " & ".join("$n=" + str(n) + "$" for n in sizes)
+    _tex(TABLES / "noise_frame.tex", f"""\\begin{{tabular}}{{ll{'c'*len(sizes)}}}
+\\toprule
+noise frame & model & {header} \\\\
+\\midrule
+{chr(10).join(x for x in body if x)}
+\\bottomrule
+\\end{{tabular}}""")
+
+
+def lr_fairness_table(d: dict) -> None:
+    agg = _mean_std(d["rows"], ("model", "n_train", "lr"), "macro_f1")
+    sizes = sorted({r["n_train"] for r in d["rows"]})
+    lrs = d["learning_rates"]
+    body = []
+    for m in ("equivariant", "resnet"):
+        for n in sizes:
+            cells = [f"{agg[(m,n,lr)][0]:.3f}" if (m, n, lr) in agg else "--" for lr in lrs]
+            best = max((agg[(m, n, lr)][0] for lr in lrs if (m, n, lr) in agg), default=0.0)
+            body.append(f"  {LABELS.get(m,m)} & {n} & " + " & ".join(cells)
+                        + f" & \\textbf{{{best:.3f}}} \\\\")
+    header = " & ".join("$\\eta=" + f"{lr:.0e}" + "$" for lr in lrs)
+    _tex(TABLES / "lr_fairness.tex", f"""\\begin{{tabular}}{{ll{'c'*len(lrs)}c}}
+\\toprule
+model & $n$ & {header} & best \\\\
+\\midrule
+{chr(10).join(body)}
+\\bottomrule
+\\end{{tabular}}""")
+
+
 def main() -> None:
     handlers = [
         ("theory", theory_tables), ("equivariance", equivariance_table),
         ("h1_sample_efficiency", h1_outputs),
         ("h2_h3_probe_robustness", h2_h3_outputs),
         ("h4_dipole_breakdown", h4_outputs), ("capacity_ablation", capacity_table),
+        ("noise_frame", noise_frame_table), ("lr_fairness", lr_fairness_table),
     ]
     for name, fn in handlers:
         d = load(name)

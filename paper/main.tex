@@ -222,6 +222,19 @@ an artefact of one transform.}
 \input{tables/geometry}
 \end{table}
 
+\begin{remark}[Non-orthogonality makes isotropic noise anisotropic]\label{rem:noise}
+Measurement noise lives in the electrode frame: it is added \emph{after} the heart
+vector is rotated, and is approximately isotropic across leads. Pulling it back
+through the gauge gives covariance $(D^{\top}D)^{-1}$ in heart-vector coordinates,
+whose condition number is exactly $\kappa(D)^2$ --- $2.11$ for Dower and $4.80$ for
+Kors. The pose therefore carries information about how badly noise corrupts the
+discriminative directions, so \emph{the Bayes-optimal classifier is not exactly
+invariant even when the label is}. An exactly invariant model is, to that extent,
+misspecified by construction. Section~\ref{sec:noiseframe} isolates this effect
+experimentally; we believe it is a genuine part of the H1 crossover, and it is a
+consequence of non-orthogonality that has no analogue in the usual orthogonal setting.
+\end{remark}
+
 \section{Theorem 1: a gauge, and all equivariant linear maps}\label{sec:gauge}
 
 \begin{theorem}[Gauge and equivariant maps]\label{thm:gauge}
@@ -310,6 +323,14 @@ geometries, but is self-adjoint only in the gauge of Theorem~\ref{thm:gauge}. Th
 the precise step at which the orthogonal-action generalisation arguments fail.}
 \label{tab:reynolds}
 \input{tables/reynolds}
+\end{table}
+
+\begin{table}[t]\centering
+\caption{The constant in Theorem~\ref{thm:gen}(c): condition number of the congruence
+induced on degree-$k$ polynomial features by the change of gauge. It is modest at low
+degree and grows geometrically, which is itself worth stating.}
+\label{tab:distortion}
+\input{tables/distortion}
 \end{table}
 
 \paragraph{How much is removed.} The gain in (c) is the fraction of the hypothesis
@@ -505,6 +526,35 @@ symmetry-breaking weight of the relaxed model.}
 decomposition of Theorem~\ref{thm:ident} is what repairs it.}
 \label{tab:h4b}
 \input{tables/h4_axis}
+\end{table}
+
+\subsection{Noise frame: isolating the mechanism of Remark~\ref{rem:noise}}\label{sec:noiseframe}
+
+Table~\ref{tab:noiseframe} repeats the comparison with noise injected in the heart
+frame, where the observation is an exact group action on a pose-independent random
+variable and exact invariance \emph{is} statistically optimal. The change in the gap
+between the two frames measures how much of the equivariant model's large-sample
+deficit is attributable to the anisotropy of Remark~\ref{rem:noise} rather than to the
+architecture.
+
+\begin{table}[t]\centering
+\caption{Test macro-F1 with noise in the electrode frame (realistic) versus the heart
+frame (where exact invariance is optimal).}
+\label{tab:noiseframe}
+\input{tables/noise_frame}
+\end{table}
+
+\subsection{Is the comparison confounded by a shared learning rate?}
+
+A constrained model may simply want a different step size, and reporting a deficit
+that is really a tuning artefact would be a serious error. Table~\ref{tab:lr} sweeps
+the learning rate per architecture and reports the best each attains.
+
+\begin{table}[t]\centering
+\caption{Learning-rate sweep per architecture. The H1 conclusion should be read off
+the \emph{best} column for each model.}
+\label{tab:lr}
+\input{tables/lr_fairness}
 \end{table}
 
 \subsection{Is the large-sample deficit bias or capacity?}

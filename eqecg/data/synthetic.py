@@ -79,6 +79,18 @@ class SimulatorConfig:
     nondipolar_fraction: float = 0.0
     #: nuisance rotation regime: "none", "small" (posture-like) or "haar"
     rotation: str = "small"
+    #: frame in which measurement noise is injected.
+    #: "lead"  -- noise is added *after* the rotation, i.e. it lives in the electrode
+    #:            frame.  This is the physically realistic choice, and it has a
+    #:            consequence that matters: because the gauge is non-orthogonal,
+    #:            isotropic lead-space noise is *anisotropic* in heart-vector
+    #:            coordinates (condition number kappa(D)^2), so the Bayes-optimal
+    #:            classifier is not exactly invariant even when the label is.
+    #: "heart" -- noise is added *before* the rotation, making the whole observation
+    #:            an exact group action on a pose-independent random variable.  Exact
+    #:            invariance is then statistically optimal, which isolates how much of
+    #:            any deficit is due to this effect rather than to the architecture.
+    noise_frame: str = "lead"
     max_rotation_deg: float = 30.0
     #: additive noise, as a fraction of the signal's RMS
     baseline_wander: float = 0.12
@@ -255,6 +267,7 @@ class DipoleECGSimulator:
             v_true[i] = v
             signal = geo.to_leads(R[i] @ v)
 
+            resid = None
             if cfg.nondipolar_fraction > 0:
                 # Non-dipolar content lives in Vres and is *not* moved by the rotation,
                 # which is exactly why it breaks strict equivariance (H4).
@@ -274,7 +287,19 @@ class DipoleECGSimulator:
                 )
                 signal = signal + resid
 
-            signal = signal + self._noise(rng, float(np.std(signal)))
+            if cfg.noise_frame == "heart":
+                # Build the whole record in the un-rotated frame and act on it once,
+                # so the observation is exactly rho(R) applied to a pose-independent
+                # random variable.
+                signal = geo.to_leads(v)
+                if cfg.nondipolar_fraction > 0:
+                    signal = signal + resid
+                signal = signal + self._noise(rng, float(np.std(signal)))
+                signal = geo.rho_ext(R[i]) @ signal
+            elif cfg.noise_frame == "lead":
+                signal = signal + self._noise(rng, float(np.std(signal)))
+            else:  # pragma: no cover - defensive
+                raise ValueError(f"unknown noise_frame {cfg.noise_frame!r}")
             # Re-impose the limb-lead identities, which noise would otherwise violate.
             x[i] = geo.P8 @ signal
 
