@@ -1,0 +1,292 @@
+{
+  "theorem1_geometry": {
+    "dower": {
+      "singular_values_of_D": [
+        2.5921733077638747,
+        2.38700592145682,
+        1.7862650344914
+      ],
+      "anisotropy_kappa_D": 1.4511694836494067,
+      "metric_condition_number": 6.719362457483508,
+      "max_euclidean_orthogonality_defect": 1.19270743588164,
+      "max_M_invariance_defect": 6.048609518142066e-16,
+      "homomorphism_error": 6.661338147750939e-16,
+      "rank_dipolar": 3,
+      "rank_residual": 5,
+      "rank_realisable": 8
+    },
+    "kors": {
+      "singular_values_of_D": [
+        2.9760680247900186,
+        1.6866937399146318,
+        1.3582131061190332
+      ],
+      "anisotropy_kappa_D": 2.191164266772432,
+      "metric_condition_number": 8.856980888177597,
+      "max_euclidean_orthogonality_defect": 3.8676004965225714,
+      "max_M_invariance_defect": 1.0058753290279578e-15,
+      "homomorphism_error": 9.43689570931383e-16,
+      "rank_dipolar": 3,
+      "rank_residual": 5,
+      "rank_realisable": 8
+    }
+  },
+  "theorem1_intertwiner_dimensions": [
+    {
+      "channels_in": 1,
+      "channels_out": 1,
+      "numerical_dimension": 26,
+      "schur_prediction": 26
+    },
+    {
+      "channels_in": 1,
+      "channels_out": 2,
+      "numerical_dimension": 52,
+      "schur_prediction": 52
+    },
+    {
+      "channels_in": 2,
+      "channels_out": 2,
+      "numerical_dimension": 104,
+      "schur_prediction": 104
+    },
+    {
+      "channels_in": 4,
+      "channels_out": 3,
+      "numerical_dimension": 312,
+      "schur_prediction": 312
+    }
+  ],
+  "theorem2_reynolds": {
+    "euclidean": {
+      "relative_idempotency_error": 1.3852228840723554e-16,
+      "relative_asymmetry": 0.1893727645807421,
+      "trace": 26.0,
+      "monte_carlo_max_deviation": 0.011827377419925164
+    },
+    "M": {
+      "relative_idempotency_error": 0.0,
+      "relative_asymmetry": 0.0,
+      "trace": 26.0,
+      "monte_carlo_max_deviation": 0.009839569929561103
+    }
+  },
+  "theorem2_dimension_table": [
+    {
+      "time_samples": 1,
+      "degree": 1,
+      "dim_total": 8,
+      "dim_invariant": 5,
+      "fraction_removed": 0.375
+    },
+    {
+      "time_samples": 1,
+      "degree": 2,
+      "dim_total": 36,
+      "dim_invariant": 16,
+      "fraction_removed": 0.5555555555555557
+    },
+    {
+      "time_samples": 1,
+      "degree": 3,
+      "dim_total": 120,
+      "dim_invariant": 40,
+      "fraction_removed": 0.666666666666667
+    },
+    {
+      "time_samples": 1,
+      "degree": 4,
+      "dim_total": 330,
+      "dim_invariant": 86,
+      "fraction_removed": 0.7393939393939395
+    },
+    {
+      "time_samples": 2,
+      "degree": 1,
+      "dim_total": 16,
+      "dim_invariant": 10,
+      "fraction_removed": 0.375
+    },
+    {
+      "time_samples": 2,
+      "degree": 2,
+      "dim_total": 136,
+      "dim_invariant": 58,
+      "fraction_removed": 0.5735294117647063
+    },
+    {
+      "time_samples": 2,
+      "degree": 3,
+      "dim_total": 816,
+      "dim_invariant": 250,
+      "fraction_removed": 0.6936274509803924
+    },
+    {
+      "time_samples": 2,
+      "degree": 4,
+      "dim_total": 3876,
+      "dim_invariant": 886,
+      "fraction_removed": 0.7714138286893708
+    },
+    {
+      "time_samples": 4,
+      "degree": 1,
+      "dim_total": 32,
+      "dim_invariant": 20,
+      "fraction_removed": 0.375
+    },
+    {
+      "time_samples": 4,
+      "degree": 2,
+      "dim_total": 528,
+      "dim_invariant": 220,
+      "fraction_removed": 0.5833333333333336
+    },
+    {
+      "time_samples": 4,
+      "degree": 3,
+      "dim_total": 5984,
+      "dim_invariant": 1744,
+      "fraction_removed": 0.7085561497326207
+    },
+    {
+      "time_samples": 4,
+      "degree": 4,
+      "dim_total": 52360,
+      "dim_invariant": 11090,
+      "fraction_removed": 0.7881970970206267
+    },
+    {
+      "time_samples": 8,
+      "degree": 1,
+      "dim_total": 64,
+      "dim_invariant": 40,
+      "fraction_removed": 0.375
+    },
+    {
+      "time_samples": 8,
+      "degree": 2,
+      "dim_total": 2080,
+      "dim_invariant": 856,
+      "fraction_removed": 0.588461538461539
+    },
+    {
+      "time_samples": 8,
+      "degree": 3,
+      "dim_total": 45760,
+      "dim_invariant": 12976,
+      "fraction_removed": 0.7164335664335668
+    },
+    {
+      "time_samples": 8,
+      "degree": 4,
+      "dim_total": 766480,
+      "dim_invariant": 155836,
+      "fraction_removed": 0.7966861496712244
+    }
+  ],
+  "theorem2_monte_carlo_check": [
+    {
+      "n_vector": 1,
+      "degree": 2,
+      "exact": 16,
+      "monte_carlo": 16.0415202072401,
+      "total": 36
+    },
+    {
+      "n_vector": 1,
+      "degree": 3,
+      "exact": 40,
+      "monte_carlo": 40.13015264707287,
+      "total": 120
+    },
+    {
+      "n_vector": 2,
+      "degree": 2,
+      "exact": 58,
+      "monte_carlo": 58.17617631821218,
+      "total": 136
+    },
+    {
+      "n_vector": 2,
+      "degree": 3,
+      "exact": 250,
+      "monte_carlo": 251.03605830733528,
+      "total": 816
+    }
+  ],
+  "theorem3_identifiability": [
+    {
+      "trajectory_rank": 3,
+      "noise_sigma": 0.0,
+      "pose_error_deg_mean": 7.447362807662425e-07,
+      "pose_error_deg_p95": 1.95699291532483e-06,
+      "gram_relative_error": 2.9414402726565896e-16,
+      "chirality_signal": 0.053718837056792125
+    },
+    {
+      "trajectory_rank": 3,
+      "noise_sigma": 0.01,
+      "pose_error_deg_mean": 1.1525991987621704,
+      "pose_error_deg_p95": 2.0950975708144006,
+      "gram_relative_error": 0.1925557644250582,
+      "chirality_signal": 0.06234513684812658
+    },
+    {
+      "trajectory_rank": 3,
+      "noise_sigma": 0.05,
+      "pose_error_deg_mean": 5.663146982187147,
+      "pose_error_deg_p95": 10.253249672521022,
+      "gram_relative_error": 1.075806525662117,
+      "chirality_signal": 0.053579140322879026
+    },
+    {
+      "trajectory_rank": 2,
+      "noise_sigma": 0.0,
+      "pose_error_deg_mean": 4.897585238051016e-07,
+      "pose_error_deg_p95": 1.7075472925031877e-06,
+      "gram_relative_error": 2.760311207458852e-16,
+      "chirality_signal": 3.921418268827205e-18
+    },
+    {
+      "trajectory_rank": 2,
+      "noise_sigma": 0.01,
+      "pose_error_deg_mean": 1.1625147057073102,
+      "pose_error_deg_p95": 2.4454154959647436,
+      "gram_relative_error": 0.1579239637631551,
+      "chirality_signal": 4.276515988441059e-18
+    },
+    {
+      "trajectory_rank": 2,
+      "noise_sigma": 0.05,
+      "pose_error_deg_mean": 5.854630027817075,
+      "pose_error_deg_p95": 10.826290849354995,
+      "gram_relative_error": 0.8851756682204482,
+      "chirality_signal": 3.685777433328389e-18
+    },
+    {
+      "trajectory_rank": 1,
+      "noise_sigma": 0.0,
+      "pose_error_deg_mean": 88.36013042675256,
+      "pose_error_deg_p95": 171.75868399170605,
+      "gram_relative_error": 2.3773997299740293e-16,
+      "chirality_signal": 1.3335567531918139e-34
+    },
+    {
+      "trajectory_rank": 1,
+      "noise_sigma": 0.01,
+      "pose_error_deg_mean": 92.84695375002603,
+      "pose_error_deg_p95": 170.79847787260906,
+      "gram_relative_error": 0.11373664787537754,
+      "chirality_signal": 1.097128520576317e-34
+    },
+    {
+      "trajectory_rank": 1,
+      "noise_sigma": 0.05,
+      "pose_error_deg_mean": 85.45253361519715,
+      "pose_error_deg_p95": 163.83172660910986,
+      "gram_relative_error": 0.6474613663495619,
+      "chirality_signal": 9.854845894684447e-35
+    }
+  ]
+}

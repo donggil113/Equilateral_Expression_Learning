@@ -1,0 +1,65 @@
+{
+  "n_test": 64,
+  "architectures": {
+    "equivariant": {
+      "small_rotation_30deg": {
+        "relative_logit_error_mean": 4.4578406210860066e-07,
+        "relative_logit_error_max": 5.273601004773809e-07,
+        "pose_equivariance_error_deg_max": 0.03956468030810356
+      },
+      "haar_rotation": {
+        "relative_logit_error_mean": 4.5896805822565057e-07,
+        "relative_logit_error_max": 6.328320978354895e-07,
+        "pose_equivariance_error_deg_max": 0.03956468030810356
+      }
+    },
+    "equivariant-naive-lift": {
+      "small_rotation_30deg": {
+        "relative_logit_error_mean": 0.014417157413845416,
+        "relative_logit_error_max": 0.03583178296685219,
+        "pose_equivariance_error_deg_max": 121.39952850341797
+      },
+      "haar_rotation": {
+        "relative_logit_error_mean": 0.06742499116808176,
+        "relative_logit_error_max": 0.0853702649474144,
+        "pose_equivariance_error_deg_max": 179.88809204101562
+      }
+    },
+    "resnet": {
+      "small_rotation_30deg": {
+        "relative_logit_error_mean": 0.20842613466084003,
+        "relative_logit_error_max": 0.599429726600647,
+        "pose_equivariance_error_deg_max": 179.35108947753906
+      },
+      "haar_rotation": {
+        "relative_logit_error_mean": 0.5949037466198206,
+        "relative_logit_error_max": 0.7156664729118347,
+        "pose_equivariance_error_deg_max": 179.62257385253906
+      }
+    },
+    "vcg-resnet": {
+      "small_rotation_30deg": {
+        "relative_logit_error_mean": 0.12056076287990436,
+        "relative_logit_error_max": 0.2925861179828644,
+        "pose_equivariance_error_deg_max": 159.88040161132812
+      },
+      "haar_rotation": {
+        "relative_logit_error_mean": 0.4227825999259949,
+        "relative_logit_error_max": 0.5415891408920288,
+        "pose_equivariance_error_deg_max": 179.97201538085938
+      }
+    }
+  },
+  "lead_reversal_vs_group": {
+    "LA-RA": {
+      "residual_to_nearest_group_element": 0.2932316387763436,
+      "nearest_rotation_angle_deg": 3.538740275111575,
+      "acts_on_residual_subspace": 0.6963702485980058
+    },
+    "LA-LL": {
+      "residual_to_nearest_group_element": 1.0239274015028375,
+      "nearest_rotation_angle_deg": 65.48619368498814,
+      "acts_on_residual_subspace": 0.08007062642314473
+    }
+  }
+}

@@ -1,0 +1,14 @@
+\begin{tabular}{llcc}
+\toprule
+Architecture & Rotation regime & rel.\ logit error & pose error (deg) \\
+\midrule
+  Equivariant (ours) & small rotation 30deg & \num{5.27e-07} & 0.04 \\
+  Equivariant (ours) & haar rotation & \num{6.33e-07} & 0.04 \\
+  equivariant-naive-lift & small rotation 30deg & \num{3.58e-02} & 121.40 \\
+  equivariant-naive-lift & haar rotation & \num{8.54e-02} & 179.89 \\
+  ResNet-1D & small rotation 30deg & \num{5.99e-01} & 179.35 \\
+  ResNet-1D & haar rotation & \num{7.16e-01} & 179.62 \\
+  VCG-ResNet-1D & small rotation 30deg & \num{2.93e-01} & 159.88 \\
+  VCG-ResNet-1D & haar rotation & \num{5.42e-01} & 179.97 \\
+\bottomrule
+\end{tabular}

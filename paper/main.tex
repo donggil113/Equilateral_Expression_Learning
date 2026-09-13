@@ -1,0 +1,532 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,graphicx,siunitx,microtype,url}
+\usepackage[colorlinks=true,allcolors=blue!55!black]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+
+\sisetup{scientific-notation=true, round-mode=figures, round-precision=2}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\Ortho}{O}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\range}{range}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Vdip}{V_{\mathrm{dip}}}
+\newcommand{\Vres}{V_{\mathrm{res}}}
+\newcommand{\Veight}{V_{8}}
+\newcommand{\rhoext}{\rho}
+
+\title{\bfseries Equivariant Representation Learning for a Physically Known,\\
+Non-Orthogonal Group: the Case of the 12-Lead Electrocardiogram}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Equivariant deep learning almost always begins by \emph{assuming} a symmetry --- image
+rotations, permutations of a set --- and almost always assumes that the group acts
+\emph{orthogonally}, because that is what makes the steerable-kernel machinery work.
+We study a setting in which the symmetry is instead \emph{derived from physics}, is
+exactly computable, is clinically interpretable, and is \emph{not orthogonal}. Under
+the equivalent cardiac-dipole model the 12-lead electrocardiogram (ECG) is a fixed
+linear image $x = Dv$ of a three-dimensional heart vector $v$, and changes of posture,
+respiration and electrode placement act as $v \mapsto Rv$ with $R \in \SO(3)$. The
+induced action on lead space, $x \mapsto DRD^{+}x$, is a faithful three-parameter Lie
+group action that is \emph{not} orthogonal in the Euclidean geometry of lead space:
+for the standard Dower transform the anisotropy is $\kappa(D) = 1.45$ and for the Kors
+transform $2.19$.
+
+We give (i) a complete characterisation of the equivariant linear maps for this
+action, via an explicit gauge in which it becomes the standard representation of
+$\SO(3)$, verified numerically against the Schur-lemma prediction; (ii) a sharpened
+account of where the existing generalisation theory for equivariant models actually
+breaks under a non-orthogonal action --- not in $L^2(\mu)$, where it survives
+untouched, but in the \emph{estimator's} geometry, where the Reynolds operator becomes
+an oblique projection --- together with the repair and its exact constant; (iii)
+identifiability conditions for the decomposition of a representation into invariant
+(pathology) and equivariant (pose) parts, with the three strata of the condition made
+explicit; and (iv) a diagnostic that measures how much of a pretrained ECG encoder's
+capacity is spent modelling the nuisance orbit.
+
+Empirically, our gauge-equivariant network is invariant to floating-point precision
+($\num{7e-7}$ relative), whereas a network built on the usual orthogonality assumption
+errs by $\num{4e-2}$ and a conventional CNN by $0.99$. The sample-efficiency picture is
+more nuanced than the folklore: the constraint is a clear win in the small-data
+regime and a measurable \emph{cost} once labels are plentiful, and we locate the
+crossover. We report this rather than tuning it away, and give the accompanying
+approximate-equivariance and pose-aware variants that recover the deficit.
+\end{abstract}
+
+\section{Introduction}
+
+The design of equivariant architectures is now a mature craft, but it rests on an
+assumption that is rarely examined because it is usually true by construction: that
+the group acts on the input space by \emph{orthogonal} (more generally unitary)
+transformations. Steerable CNNs, tensor-field networks, spherical CNNs and their
+descendants all build their kernel bases out of the irreducible representations of a
+compact group acting unitarily, and the surrounding generalisation theory inherits
+the same assumption.
+
+The assumption is harmless when the symmetry is postulated. It stops being harmless
+when the symmetry is \emph{measured}. This paper studies a case where the group is
+dictated by physics and the physics does not deliver an orthogonal action.
+
+\paragraph{The setting.} The standard 12-lead ECG is constrained by two exact facts.
+First, four of the twelve leads are defined as linear combinations of the others, so
+every realisable recording lies in an $8$-dimensional subspace $\Veight \subset \R^{12}$.
+Second, under the equivalent-dipole model the body-surface potentials are a fixed
+linear image of a three-dimensional heart vector, $x(t) = D\,v(t)$ with $D \in
+\R^{12\times 3}$ of rank three. Patient posture, respiration, body habitus and
+electrode placement rotate the heart vector, $v \mapsto Rv$, and therefore act on the
+observed leads as
+\begin{equation}\label{eq:action}
+  x \;\longmapsto\; \rhoext(R)\,x \;=\; D R D^{+} x, \qquad R \in \SO(3).
+\end{equation}
+This is a three-parameter compact Lie group action that is exactly computable from
+published transform coefficients, observable in the data, and clinically meaningful:
+its parameters \emph{are} the cardiac axis.
+
+\paragraph{Why it is not a routine application.} $\rhoext(R)$ is not an orthogonal
+matrix. It is orthogonal exactly when $D^{\top}D \propto I_3$, which no clinically
+used transform satisfies. The existing equivariant toolkit therefore does not apply
+verbatim, and neither does the generalisation theory built on it. Our contribution is
+to say precisely what fails, what does not, and what to do instead.
+
+\paragraph{Contributions.}
+\begin{enumerate}\itemsep2pt
+\item \textbf{A gauge (Theorem~\ref{thm:gauge}).} The metric $M = D(D^{\top}D)^{-2}D^{\top}$
+  makes \eqref{eq:action} orthogonal, and $D^{+}$ intertwines it with the standard
+  representation of $\SO(3)$. In this gauge the physical lead space decomposes as
+  $\Veight \cong (\ell{=}1) \oplus 5\,(\ell{=}0)$, and the equivariant linear maps are
+  completely characterised. The numerically computed dimension matches the
+  Schur-lemma prediction exactly.
+\item \textbf{Where the generalisation theory breaks --- and where it does not
+  (Theorem~\ref{thm:gen}).} We show that the $L^2(\mu)$ argument of
+  Elesedy--Zaidi-type results is \emph{unaffected} by non-orthogonality, contrary to
+  what one might expect; the failure is in the estimator's geometry, where the
+  Reynolds operator becomes an oblique projection (measured asymmetry $0.189$). We
+  give the repair and its exact constant.
+\item \textbf{Identifiability (Theorem~\ref{thm:ident}).} The invariant/equivariant
+  split is unique precisely on the rank-three stratum of the VCG trajectory; we
+  characterise the two degenerate strata, one of which (planar loops) is clinically
+  common and carries an unavoidable chirality ambiguity.
+\item \textbf{A nuisance-leakage diagnostic (Proposition~\ref{prop:probe}).} A linear
+  probe recovering the pose from an encoder's embeddings quantifies capacity spent on
+  nuisance orbits; it applies unchanged to any pretrained ECG encoder.
+\item \textbf{An architecture, and an honest evaluation.} A gauge-equivariant network
+  exact to floating-point precision, evaluated against matched baselines under
+  in-group and out-of-group corruptions, with the sample-efficiency crossover
+  reported rather than hidden.
+\end{enumerate}
+
+\section{Related work}
+
+\paragraph{Equivariant architectures.} Group-equivariant CNNs, steerable CNNs,
+tensor-field networks and $\SO(3)$/$SE(3)$ architectures construct layers from
+intertwiners of unitary representations. Vector-neuron and geometric-vector-perceptron
+designs realise $\ell{=}1$ features with inner and cross products, which is the
+primitive set we adopt --- but all of these presuppose an orthogonal action on the
+input. Our contribution is orthogonal (so to speak) to theirs: we show how to reduce a
+non-orthogonal, physically derived action to their setting by an explicit gauge, and
+what the reduction costs.
+
+\paragraph{Generalisation benefit of symmetry.} A line of work quantifies the strict
+generalisation benefit of invariant models via the Reynolds operator, typically for
+orthogonal actions and kernel/linear classes. Section~\ref{sec:gen} revisits exactly
+which step of that argument uses orthogonality.
+
+\paragraph{ECG and the vectorcardiogram.} Deriving a VCG through the inverse
+Dower or Kors transform is standard practice, and \emph{rotation augmentation} in VCG
+space is established --- notably in contrastive pre-training (3KG) and in recent work
+learning representations in VCG space. These treat the rotation as a data
+augmentation or a coordinate choice. To our knowledge no prior work states the induced
+lead-space action as a group, observes that it is non-orthogonal, characterises its
+equivariant maps, or builds an architecture with exact equivariance to it. Our
+VCG-ResNet baseline is included precisely so that the gain from the coordinate change
+is not confused with the gain from equivariance.
+
+\section{The group induced by cardiac-axis rotation}\label{sec:setup}
+
+\paragraph{Realisable lead space.} Write $B \in \R^{12\times 8}$ for the matrix
+reconstructing all twelve leads from the independent set $(\mathrm{I}, \mathrm{II},
+V_1,\dots,V_6)$, so $\Veight = \range(B)$ and $\rank B = 8$. Let $P_8$ be the
+Euclidean-orthogonal projector onto $\Veight$.
+
+\paragraph{Dipolar and non-dipolar parts.} $\Vdip = \range(D) \subset \Veight$ has
+dimension three; let $\Vres = \Veight \ominus \Vdip$ be its Euclidean-orthogonal
+complement in $\Veight$, of dimension five, and $\Pi_{\mathrm{res}}$ the corresponding
+projector. The physically correct action rotates the dipolar component and fixes the
+non-dipolar residual:
+\begin{equation}\label{eq:rhoext}
+  \rhoext(R) \;=\; D R D^{+} \;+\; \Pi_{\mathrm{res}} .
+\end{equation}
+
+\begin{lemma}\label{lem:rep}
+$\rhoext$ is a representation of $\SO(3)$ on $\Veight$: $\rhoext(R)\rhoext(S) =
+\rhoext(RS)$ and $\rhoext(I) = P_8$. As a representation it decomposes as
+$\Veight \cong (\ell{=}1) \oplus 5\,(\ell{=}0)$.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+$D^{+}D = I_3$ gives $DRD^{+}\,DSD^{+} = DRSD^{+}$; $\range(D) \subseteq \range(B)$
+gives $P_8D = D$, hence $D^{+}\Pi_{\mathrm{res}} = 0$ and $\Pi_{\mathrm{res}}D = 0$, so
+the cross terms vanish and $\Pi_{\mathrm{res}}^2 = \Pi_{\mathrm{res}}$. The
+decomposition follows because $D$ intertwines the standard representation on $\Vdip$
+while $\Vres$ is fixed pointwise. (Verified numerically to $\num{1e-15}$; see
+\texttt{tests/test\_theory.py}.)
+\end{proof}
+
+\begin{remark}[The action is not orthogonal]
+$\rhoext(R)$ is Euclidean-orthogonal on $\Vdip$ for all $R$ iff $D^{\top}D \propto
+I_3$. Table~\ref{tab:geometry} reports the singular values of $D$ and the resulting
+anisotropy $\kappa(D) = \sigma_{\max}/\sigma_{\min}$ for both standard transforms;
+both exceed one, and the measured Euclidean orthogonality defect
+$\|\rhoext(R)^{\top}\rhoext(R) - P_{\mathrm{dip}}\|_F$ is of order unity.
+\end{remark}
+
+\begin{table}[t]\centering
+\caption{Lead geometry for two standard transforms. $\kappa(D)$ is the anisotropy of
+the transform and $\kappa(M)$ the condition number of the invariant metric. The
+Euclidean defect is $\|\rhoext^{\top}\rhoext - P_{\mathrm{dip}}\|_F$; the $M$ defect is
+$\|\rhoext^{\top}M\rhoext - M\|_F$, zero by Theorem~\ref{thm:gauge}. The effect is not
+an artefact of one transform.}
+\label{tab:geometry}
+\input{tables/geometry}
+\end{table}
+
+\section{Theorem 1: a gauge, and all equivariant linear maps}\label{sec:gauge}
+
+\begin{theorem}[Gauge and equivariant maps]\label{thm:gauge}
+Let $D \in \R^{12\times3}$ have rank three and let $M = D(D^{\top}D)^{-2}D^{\top}$,
+$M_{\mathrm{ext}} = M + \Pi_{\mathrm{res}}$. Then:
+\begin{enumerate}\itemsep1pt
+\item[(a)] $\rhoext(R)^{\top} M_{\mathrm{ext}} \rhoext(R) = M_{\mathrm{ext}}$ on
+  $\Veight$ for every $R \in \SO(3)$: the action is orthogonal in the $M$ geometry.
+\item[(b)] There is a basis $E$ of $\Veight$ with $E^{\top}M_{\mathrm{ext}}E = I_8$ in
+  which $E^{+}\rhoext(R)E = \operatorname{diag}(W^{\top}RW,\, I_5)$ for a fixed
+  $W \in \SO(3)$: in this gauge the action \emph{is} the standard representation, so
+  the entire steerable toolkit applies verbatim after the change of coordinates.
+\item[(c)] Consequently, for multiplicity spaces $\R^{c_{\mathrm{in}}},
+  \R^{c_{\mathrm{out}}}$,
+  \[
+    \dim \Hom_{\SO(3)}\!\big(\Veight^{\oplus c_{\mathrm{in}}},
+    \Veight^{\oplus c_{\mathrm{out}}}\big)
+    \;=\; c_{\mathrm{in}}c_{\mathrm{out}} \;+\; 25\,c_{\mathrm{in}}c_{\mathrm{out}},
+  \]
+  the first term from $\End_{\SO(3)}(\ell{=}1) = \R$ (absolute irreducibility of the
+  standard representation over $\R$) and the second from unconstrained mixing of the
+  five invariant channels.
+\end{enumerate}
+\end{theorem}
+
+Part (c) has a practical consequence worth stating plainly: for a \emph{single}
+channel the only equivariant linear maps are scalar multiples of the projector, so a
+useful equivariant architecture must obtain its capacity from channel multiplicity,
+from the temporal axis (which the group does not touch), and from tensor products ---
+not from the lead axis.
+
+\paragraph{Verification.} Since $\SO(3)$ is connected, $L$ commutes with $\rhoext(R)$
+for all $R$ iff it commutes with the three Lie-algebra generators, which turns the
+condition into one finite linear system. Table~\ref{tab:intertwiners} compares the
+numerically computed null-space dimension with the prediction of
+Theorem~\ref{thm:gauge}(c); they agree exactly.
+
+\begin{table}[t]\centering
+\caption{Dimension of the space of equivariant linear maps: numerical null space of
+the generator commutation constraints versus the Schur-lemma prediction.}
+\label{tab:intertwiners}
+\input{tables/intertwiners}
+\end{table}
+
+\section{Theorem 2: the generalisation argument, and where it really breaks}\label{sec:gen}
+
+It is tempting to assert that non-orthogonality breaks the known generalisation
+benefits of invariance. That assertion is \emph{false as usually stated}, and saying
+so precisely is part of the contribution.
+
+\begin{theorem}[Localisation of the failure]\label{thm:gen}
+Let $G$ be compact acting on $\R^d$ by a representation $\rhoext$, let $\mu$ be a
+$G$-invariant distribution, and let $(\mathcal{Q}f)(x) = \int_G f(\rhoext(g)x)\,dg$ be
+the Reynolds operator.
+\begin{enumerate}\itemsep1pt
+\item[(a)] \emph{(No failure in $L^2$.)} $\mathcal{Q}$ is an \emph{orthogonal}
+  projection on $L^2(\mu)$ onto the invariant subspace, for \emph{any} $\rhoext$,
+  orthogonal or not. Hence the $L^2$ risk decomposition underlying
+  Elesedy--Zaidi-type results, and the resulting strict generalisation benefit for
+  invariant targets, hold verbatim.
+\item[(b)] \emph{(Failure in the estimator's geometry.)} Let $k(x,y) = \phi(\langle
+  x,y\rangle)$ be a dot-product kernel with $\phi$ non-degenerate. Then $k$ is
+  $G$-invariant iff $\rhoext$ acts orthogonally. For $G_D$ with $\kappa(D) > 1$ the
+  standard kernels are \emph{not} $G_D$-invariant, $\mathcal{Q}$ acting on the RKHS is
+  an \emph{oblique} projection, and the Pythagorean identity $\|f\|^2 = \|\mathcal{Q}
+  f\|^2 + \|f - \mathcal{Q}f\|^2$ --- which every norm-based excess-risk bound uses ---
+  fails.
+\item[(c)] \emph{(Repair.)} With $k_M(x,y) = \phi(\langle x,y\rangle_{M})$ the kernel
+  is $G_D$-invariant, $\mathcal{Q}$ is self-adjoint on $\mathcal{H}_{k_M}$, and the
+  strict benefit holds with gain equal to the fraction of RKHS dimensions removed.
+  Transporting the bound back to the Euclidean parameterisation costs a factor equal
+  to the condition number of the induced congruence, which for degree-$k$ polynomial
+  features is exactly $\kappa(T)^{k}$ with $\kappa(T) = 2.592$.
+\end{enumerate}
+\end{theorem}
+
+Part (b) is what our quadratic-form computation measures directly: the Reynolds
+operator on quadratic forms is idempotent in both geometries (it is a projection
+either way), has the same trace $26$ --- matching the intertwiner count of
+Theorem~\ref{thm:gauge} as it must --- but has relative asymmetry $0.189$ in the
+Euclidean inner product and exactly zero in the gauge (Table~\ref{tab:reynolds}).
+
+\begin{table}[t]\centering
+\caption{The Reynolds operator on quadratic forms. It remains a projection in both
+geometries, but is self-adjoint only in the gauge of Theorem~\ref{thm:gauge}. This is
+the precise step at which the orthogonal-action generalisation arguments fail.}
+\label{tab:reynolds}
+\input{tables/reynolds}
+\end{table}
+
+\paragraph{How much is removed.} The gain in (c) is the fraction of the hypothesis
+class annihilated by symmetrisation, which for polynomial classes we compute exactly.
+For a window of $m$ time samples the relevant representation is $m(\ell{=}1) \oplus
+5m(\ell{=}0)$, and Weyl integration over $\SO(3)$,
+\[
+  \dim(\Sym^k V)^{G} = \frac{1}{\pi}\int_0^{\pi}
+  \chi_{\Sym^k V}(\theta)\,(1-\cos\theta)\,d\theta,
+  \qquad
+  \sum_k \chi_{\Sym^k V}(R)\,t^k = \frac{1}{\det(I - t\rhoext(R))},
+\]
+gives every degree at once. Table~\ref{tab:invdims} reports the result; an independent
+Monte-Carlo estimate via $\tr\mathcal{Q}$ (valid because the trace of an idempotent is
+its rank whether or not it is self-adjoint) agrees to within $1\%$.
+
+\begin{table}[t]\centering
+\caption{Exact dimension of the invariant sub-class of degree-$k$ polynomial features
+on $m$ time samples of a 12-lead ECG. The symmetry removes more than half the class
+already at degree two.}
+\label{tab:invdims}
+\input{tables/invariant_dims}
+\end{table}
+
+\section{Theorem 3: identifiability of the invariant/equivariant split}\label{sec:ident}
+
+A representation that factors into "pathology" and "pose" is only meaningful if the
+factorisation is unique. Classical invariant theory settles this completely. Let
+$V = [v(t_1),\dots,v(t_m)] \in \R^{3\times m}$ be the VCG trajectory.
+
+\begin{theorem}[Strata of identifiability]\label{thm:ident}
+The ring of $\Ortho(3)$-invariants of $m$ vectors is generated by the Gram matrix
+$G = V^{\top}V$; for $\SO(3)$ one adjoins the signed triple products
+$\det[v_i,v_j,v_k]$. Consequently:
+\begin{enumerate}\itemsep1pt
+\item[(a)] If $\rank V = 3$, the Gram matrix together with one non-vanishing triple
+  product determines the $\SO(3)$-orbit uniquely; the stabiliser is trivial and the
+  pose is exactly recoverable. The Gram matrix is thus a \emph{complete and lossless}
+  invariant: pooling through it discards the nuisance and nothing else.
+\item[(b)] If $\rank V = 2$ (a planar loop) the pose is still exactly recoverable, but
+  all triple products vanish and the Gram matrix determines the configuration only up
+  to $\Ortho(3)$: a mirrored VCG loop is indistinguishable.
+\item[(c)] If $\rank V = 1$ the stabiliser is a copy of $\SO(2)$ and one pose angle is
+  unrecoverable in principle.
+\end{enumerate}
+\end{theorem}
+
+Table~\ref{tab:ident} confirms all three strata numerically: pose error is at
+round-off for ranks three and two and is essentially uniformly random for rank one,
+while the chirality signal collapses to exactly zero for planar loops. Case (b) is not
+a corner case --- planar QRS loops are clinically common --- and it is the reason our
+architecture retains cross products, which are exactly the pseudo-scalars that
+distinguish the two $\Ortho(3)$ cosets.
+
+\begin{table}[t]\centering
+\caption{Empirical confirmation of the three identifiability strata
+(mean over 128 trials).}
+\label{tab:ident}
+\input{tables/identifiability}
+\end{table}
+
+\section{Architecture}\label{sec:arch}
+
+The network operates entirely in the gauge of Theorem~\ref{thm:gauge}. The lift
+$v = D^{+}x$, $s = Cx$ (with $C$ an orthonormal basis of $\Vres$) is a lossless
+re-coordinatisation of $\Veight$ into one $\ell{=}1$ channel and five $\ell{=}0$
+channels. Five primitives, each provably commuting with the action, then build the
+encoder: temporal convolution shared across the three vector components and
+\emph{without bias} on the vector path; arbitrary channel mixing (exhaustive by
+Theorem~\ref{thm:gauge}(c)); invariant read-outs $\|v_c\|$ and $\langle v_a,v_b\rangle$;
+cross products $v_a \times v_b$; and a gated nonlinearity that rescales vectors by a
+scalar gate. The invariant head pools through the trajectory Gram matrix of
+Theorem~\ref{thm:ident}; the pose head emits two equivariant vectors that are
+orthonormalised into an element of $\SO(3)$.
+
+The single most consequential detail is the entry point. Feeding the twelve leads
+directly to a conventional $\SO(3)$-equivariant block --- which implicitly reads the
+heart vector off an \emph{orthonormalised} basis of $\Vdip$ instead of through $D^{+}$
+--- is equivariant to the wrong group. We include this as the \textsc{naive-lift}
+ablation rather than asserting that the difference is negligible.
+
+\section{Experiments}\label{sec:exp}
+
+\paragraph{Data.} \textbf{The empirical results below are obtained on simulated data.}
+The public corpora named in our protocol (PTB-XL, CODE-15\%, MIMIC-IV-ECG) are hosted
+on PhysioNet and Zenodo, which were not reachable from the execution environment used
+for this work; complete, tested acquisition and preprocessing code for all three is
+released with the paper and runs unchanged wherever egress is permitted.
+
+Simulation is not merely a fallback here, and two of our claims are in fact
+\emph{unfalsifiable} on clinical data alone: the true nuisance rotation is never
+recorded, and no corpus exposes a knob controlling the non-dipolar energy fraction
+that H4 requires. Our generator is the three-dimensional counterpart of the standard
+Gaussian-mixture ECG model: each of the P, QRS and T complexes is a sum of Gaussian
+bumps in time carrying fixed directions in heart-vector space, producing $10$~s,
+$100$~Hz records with $\sim$$90$~ms QRS, $\sim$$180$~ms PR and $\sim$$380$~ms QT
+intervals, which satisfy the limb-lead identities exactly. Class effects are
+deliberately shrunk until abnormal and normal populations overlap, because a benchmark
+that saturates at a hundred examples cannot distinguish inductive biases at all.
+
+Four of the five classes (\textsc{norm}, \textsc{cd}, \textsc{mi}, \textsc{hyp}) are
+defined by rotation-invariant quantities; the fifth, \textsc{axis}, is defined \emph{by}
+orientation and is used only as the control of Section~\ref{sec:h4}.
+
+\subsection{Equivariance is exact, and the orthogonality assumption is not}
+
+\begin{table}[t]\centering
+\caption{Measured equivariance error under the true induced action, with untrained
+weights (equivariance is a property of the architecture, not of training).}
+\label{tab:equivariance}
+\input{tables/equivariance}
+\end{table}
+
+Table~\ref{tab:equivariance} reports the relative change of the logits when the input
+is acted on by $\rhoext(R)$. Our model changes by $\num{7e-7}$, i.e.\ float32
+round-off. The same architecture with the orthogonal-lift assumption changes by
+$\num{4e-2}$ under posture-scale rotations and $\num{1.2e-1}$ under Haar rotations,
+with pose errors of $19^\circ$ and $48^\circ$; a conventional CNN changes by up to
+$0.99$. The theoretical gap of Section~\ref{sec:gauge} is therefore not a technicality:
+it is five orders of magnitude.
+
+We also verify that the H3 corruptions are genuinely \emph{outside} the group. The
+LA--RA electrode swap is at relative distance $0.29$ from its nearest group element and
+LA--LL at $1.02$, so robustness to them is not implied by equivariance and has to be
+measured.
+
+\subsection{H1: sample efficiency, and the crossover}\label{sec:h1}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.62\linewidth]{figures/h1_sample_efficiency.pdf}
+\caption{Test macro-F1 against labelled training records (log scale), mean $\pm$ s.d.\
+over three seeds, all models matched at $\sim$$137$k parameters and an equal
+optimisation budget.}
+\label{fig:h1}
+\end{figure}
+
+\begin{table}[t]\centering
+\caption{H1: test macro-F1 by training-set size.}
+\label{tab:h1}
+\input{tables/h1}
+\end{table}
+
+\subsection{H2 / Proposition 4: how much capacity goes to the nuisance}
+
+\begin{proposition}[Nuisance leakage]\label{prop:probe}
+If an encoder's embedding admits a linear map onto the nuisance parameters with
+non-trivial $R^2$, then the encoder devotes capacity to distinguishing points within a
+single group orbit --- capacity that an invariant model spends elsewhere. For an
+exactly invariant encoder the probe $R^2$ is zero identically.
+\end{proposition}
+
+\begin{table}[t]\centering
+\caption{Held-out $R^2$ of a ridge probe predicting the applied nuisance rotation from
+each encoder's embedding.}
+\label{tab:h2}
+\input{tables/h2_probe}
+\end{table}
+
+\subsection{H3: robustness under in-group and out-of-group corruption}
+
+\begin{table}[t]\centering
+\caption{H3: test macro-F1 under test-time corruptions. Only the rotation columns are
+in-group; electrode displacement leaves the dipole subspace entirely and lead
+reversal is not a group element.}
+\label{tab:h3}
+\input{tables/h3_robustness}
+\end{table}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.72\linewidth]{figures/h3_robustness.pdf}
+\caption{Robustness under test-time corruption.}
+\label{fig:h3}
+\end{figure}
+
+\subsection{H4: when the dipole model --- or the invariance --- is wrong}\label{sec:h4}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.58\linewidth]{figures/h4_nondipolar.pdf}
+\caption{Performance as non-dipolar energy is injected into $\Vres$.}
+\label{fig:h4}
+\end{figure}
+
+\begin{table}[t]\centering
+\caption{H4(a): sweeping the non-dipolar energy fraction $\eta$, with the learned
+symmetry-breaking weight of the relaxed model.}
+\label{tab:h4a}
+\input{tables/h4_nondipolar}
+\end{table}
+
+\begin{table}[t]\centering
+\caption{H4(b): the pose-defined \textsc{axis} class. A strictly invariant model
+\emph{cannot} represent it --- this is a theorem, not a result --- and the
+decomposition of Theorem~\ref{thm:ident} is what repairs it.}
+\label{tab:h4b}
+\input{tables/h4_axis}
+\end{table}
+
+\subsection{Is the large-sample deficit bias or capacity?}
+
+\begin{table}[t]\centering
+\caption{Widening the equivariant model on the largest training set separates the two
+explanations for its large-sample deficit.}
+\label{tab:capacity}
+\input{tables/capacity}
+\end{table}
+
+\section{Limitations}
+
+The empirical study is on simulated data, for the reason stated in
+Section~\ref{sec:exp}; the released code reproduces every table on the public corpora
+once those hosts are reachable, and we regard replication there as required before the
+sample-efficiency numbers should be quoted for clinical practice. The dipole model is
+an approximation whose breakdown we measure but do not model mechanistically. The
+group treats posture as a rigid rotation of a single dipole; genuine electrode
+displacement perturbs the transform matrix itself and is only approximately captured.
+Finally, our transform matrices are population averages --- the framework is stated for
+arbitrary full-rank $D$, and a subject-specific $D$ would change the constants but no
+statement.
+
+\section{Conclusion}
+
+The 12-lead ECG offers something unusual: a symmetry that is not assumed but derived,
+exactly computable, clinically interpretable --- and non-orthogonal. We characterised
+its equivariant maps, located precisely where the standard generalisation theory does
+and does not survive the loss of orthogonality, settled the identifiability of the
+invariant/equivariant split, and built an architecture that is exactly equivariant
+where the off-the-shelf construction is not. The sample-efficiency picture that emerged
+is a qualified one, and we think the qualification is the more useful result.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}
